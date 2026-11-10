@@ -1,0 +1,1787 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4ecdc">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AI 比价日报">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png">
+<link rel="icon" href="./favicon.ico">
+<title>AI 会员全球比价日报 · The AI Price Gazette</title>
+<meta name="description" content="ChatGPT、Claude、Grok 会员在 21 个地区的官网 / Apple / Google Play 本币价格，按最新汇率牌价折算人民币并从低到高排行。附 Artificial Analysis 权威 AI 天梯。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,800;1,900&family=Special+Elite&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE AI PRICE GAZETTE — vintage collage newspaper
+   ============================================================ */
+:root{
+  --desk:#d8cdb8;
+  --paper:#f4ecdc;
+  --paper-hi:#fbf6ea;
+  --paper-deep:#e9dfca;
+  --ink:#1d1a16;
+  --ink-2:#3d372e;
+  --muted:#6f6453;
+  --line:#cabfa8;
+  --line-soft:#ded4bf;
+  --red:#c8442e;
+  --red-deep:#9c3020;
+  --teal:#2f6f6a;
+  --teal-deep:#1f4f4a;
+  --mustard:#e3b23c;
+  --mustard-deep:#b3851c;
+  --green:#3f7a52;
+  --sky:#8fb6c4;
+  --coral:#d97856;
+  --serif:"Songti SC","STSong","SimSun","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --display:"Playfair Display","Songti SC","STSong",Georgia,serif;
+  --mono:"Special Elite","Courier New",Courier,monospace;
+  --hand:"Segoe Print","Bradley Hand","KaiTi","STKaiti",cursive;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans SC",Arial,sans-serif;
+  --shadow:0 14px 30px rgba(55,40,20,.14), 0 2px 4px rgba(55,40,20,.08);
+  --shadow-sm:0 5px 14px rgba(55,40,20,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  overflow-x:hidden;
+  color:var(--ink);
+  font-family:var(--serif);
+  background-color:var(--desk);
+  background-image:
+    radial-gradient(ellipse at 18% -8%, rgba(255,252,242,.62), transparent 54%),
+    radial-gradient(ellipse at 92% 8%, rgba(120,92,52,.16), transparent 45%),
+    repeating-linear-gradient(114deg, rgba(96,72,40,.045) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(24deg, rgba(255,255,255,.05) 0 1px, transparent 1px 6px);
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 35%, transparent 36%, rgba(66,47,24,.22) 100%);
+}
+.grain{
+  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+::selection{background:var(--mustard); color:var(--ink)}
+
+/* ---------- page sheet ---------- */
+.page{
+  position:relative; z-index:2;
+  width:min(1280px, calc(100% - 40px));
+  margin:30px auto 54px;
+  padding:26px 38px 34px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,0) 10%),
+    radial-gradient(ellipse at 18% 8%, #faf4e7, transparent 60%),
+    radial-gradient(ellipse at 88% 96%, #efe5d1, transparent 52%),
+    var(--paper);
+  box-shadow:0 30px 60px rgba(48,33,14,.28), 0 4px 10px rgba(48,33,14,.16);
+  border:1px solid rgba(90,66,34,.28);
+  outline:1px solid rgba(255,252,242,.42);
+  outline-offset:-7px;
+}
+.page::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:-1;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(90,66,34,.11) 1px, transparent 0);
+  background-size:5px 5px;
+  opacity:.18;
+}
+/* tape + clip decorations */
+.tape{
+  position:absolute; width:132px; height:32px; z-index:8;
+  background:
+    linear-gradient(105deg, rgba(255,255,255,.32), rgba(255,255,255,0) 45%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 7px, rgba(0,0,0,.03) 7px 14px),
+    #e7c978;
+  opacity:.82;
+  box-shadow:0 2px 5px rgba(70,50,20,.14);
+  clip-path:polygon(2% 8%, 98% 0, 100% 88%, 96% 100%, 3% 96%, 0 78%);
+}
+.tape--tl{left:-10px; top:-8px; transform:rotate(-38deg)}
+.tape--tr{right:-18px; top:-30px; width:96px; transform:rotate(41deg); background-color:#dfb9a2}
+.tape--bl{left:-8px; bottom:64px; width:104px; transform:rotate(43deg); background-color:#b9d2c6}
+.paperclip{
+  position:absolute; right:20px; top:-46px; width:38px; height:88px; z-index:9;
+  transform:rotate(9deg); opacity:.9; filter:drop-shadow(0 3px 2px rgba(0,0,0,.18));
+}
+
+/* ---------- masthead ---------- */
+.masthead{position:relative; padding-top:8px}
+.masthead__meta{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted);
+  border-top:4px solid var(--ink); padding-top:9px;
+}
+.masthead__meta .grow{flex:1}
+.masthead__meta b{color:var(--red); font-weight:400}
+.masthead__rule{height:3px; background:var(--ink); margin:10px 0 4px}
+.masthead__rule--thin{height:1px; background:var(--ink); margin:0}
+.masthead__main{
+  display:grid; grid-template-columns:168px minmax(0,1fr) 178px;
+  align-items:center; gap:14px; padding:12px 0 6px;
+}
+.masthead__title{text-align:center; margin:0; line-height:.98}
+.masthead__cn{
+  display:block; font-family:var(--serif); font-weight:900;
+  font-size:clamp(34px, 5.4vw, 66px); letter-spacing:.05em;
+  color:var(--ink);
+  text-shadow:0 1px 0 rgba(255,255,255,.55), 0 2px 0 rgba(90,66,34,.08);
+}
+.masthead__ai{
+  display:inline-block; background:var(--red); color:#fff7e8;
+  font-family:var(--display); font-style:italic; font-weight:900;
+  padding:2px 10px 4px; margin-right:8px; transform:rotate(-2.5deg) translateY(-4px);
+  box-shadow:3px 4px 0 rgba(29,26,22,.18);
+  border:2px solid rgba(255,247,232,.5); outline:2px solid var(--red);
+}
+.masthead__en{
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.42em;
+  text-transform:uppercase; color:var(--ink-2); margin-top:12px; white-space:nowrap;
+}
+.masthead__en::before,.masthead__en::after{content:""; height:1px; width:38px; background:var(--ink-2)}
+.masthead__side{position:relative; min-height:96px}
+.weather{
+  position:relative; z-index:2;
+  border:1.5px dashed var(--ink-2); padding:9px 10px 8px;
+  transform:rotate(-2deg); background:var(--paper);
+  font-family:var(--mono); font-size:10px; line-height:1.55; letter-spacing:.03em;
+}
+.weather__label{font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--line); padding-bottom:3px; margin-bottom:5px}
+.weather__value{font-size:12.5px; white-space:nowrap; letter-spacing:0}
+.weather__value b{font-size:15px; color:var(--red)}
+.weather__sub{color:var(--muted); font-size:9px; margin-top:3px}
+.stamp{
+  position:absolute; z-index:1; right:-24px; bottom:-34px; width:82px; height:82px;
+  border-radius:50%; display:grid; place-items:center; text-align:center;
+  font-family:var(--mono); font-size:10.5px; line-height:1.18; letter-spacing:.1em;
+  color:var(--red); border:2.5px solid var(--red);
+  box-shadow:inset 0 0 0 4px var(--paper), inset 0 0 0 5.5px var(--red);
+  transform:rotate(11deg); opacity:.88; mix-blend-mode:multiply;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.3), transparent 60%);
+}
+.stamp::after{content:"2026 · 11 · 08"; position:absolute; bottom:11px; font-size:6px; letter-spacing:.06em}
+.masthead__side--right{display:flex; flex-direction:column; align-items:flex-end; gap:9px}
+.price-slip{
+  background:var(--mustard); transform:rotate(2.4deg);
+  padding:6px 12px 7px; font-family:var(--mono); font-size:9.5px;
+  line-height:1.5; box-shadow:var(--shadow-sm); border:1px solid rgba(70,50,20,.18);
+}
+.price-slip b{font-size:21px; letter-spacing:0; color:var(--ink)}
+.scribble{
+  font-family:var(--hand); font-size:12.5px; line-height:1.45; color:var(--teal-deep);
+  transform:rotate(-3deg); text-align:right; max-width:170px;
+}
+.masthead__lede{
+  font-size:14.5px; line-height:1.85; color:var(--ink-2); margin:12px auto 0;
+  max-width:960px; text-align:center; letter-spacing:.015em;
+}
+
+/* ---------- fx ticker ---------- */
+.ticker{
+  margin:18px -8px 0; display:flex; align-items:stretch; gap:0;
+  background:var(--ink); color:#f4ecdc; min-height:34px;
+  box-shadow:0 4px 0 rgba(29,26,22,.12);
+  transform:rotate(-.25deg);
+}
+.ticker__label{
+  flex:0 0 auto; display:flex; align-items:center; gap:6px; padding:0 12px;
+  background:var(--red); color:#fff6e6; font-family:var(--mono); font-size:9.5px;
+  letter-spacing:.18em; white-space:nowrap;
+}
+.ticker__label .pulse{background:#ffe9b8}
+.ticker__track{flex:1; overflow-x:auto; overflow-y:hidden; position:relative; display:flex; align-items:center; scrollbar-width:none}
+.ticker__track::-webkit-scrollbar{display:none}
+.ticker__track::before,.ticker__track::after{
+  content:""; position:absolute; top:0; bottom:0; width:34px; z-index:2; pointer-events:none;
+}
+.ticker__track::before{left:0; background:linear-gradient(90deg,var(--ink),transparent)}
+.ticker__track::after{right:0; background:linear-gradient(-90deg,var(--ink),transparent)}
+.ticker__inner{
+  display:flex; width:max-content;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.05em; white-space:nowrap;
+}
+.ticker__item{display:inline-flex; align-items:center; gap:7px; padding:0 17px; border-right:1px solid rgba(244,236,220,.14)}
+.ticker__item b{font-weight:400; color:#fff}
+.ticker__item .up{color:#9ed6a8}
+.ticker__item .down{color:#f2a28d}
+.ticker__item .flat{color:#c9bea7}
+.ticker__status{flex:0 0 auto; display:flex; align-items:center; gap:6px; padding:0 12px; border-left:1px solid rgba(244,236,220,.2); font-family:var(--mono); font-size:9px; letter-spacing:.1em; color:#d8cdb8}
+.pulse{width:7px; height:7px; border-radius:50%; background:#8fd3a2; box-shadow:0 0 0 3px rgba(143,211,162,.14)}
+.pulse--amber{background:var(--mustard); box-shadow:0 0 0 0 rgba(227,178,60,.5)}
+
+/* ---------- hero ---------- */
+.hero{
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);
+  gap:26px; align-items:center; padding:30px 0 26px; border-bottom:1px solid var(--line);
+}
+.kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; color:var(--red);
+  border-bottom:2px solid var(--red); padding-bottom:4px; margin-bottom:12px;
+}
+.kicker::before{content:""; width:6px; height:6px; background:var(--red); transform:rotate(45deg)}
+.hero__title{
+  margin:0 0 12px; font-family:var(--serif); font-weight:900;
+  font-size:clamp(28px, 3.6vw, 44px); line-height:1.22; letter-spacing:.01em;
+}
+.hero__title .hl{position:relative; z-index:0; white-space:nowrap}
+.hero__title .hl::after{
+  content:""; position:absolute; z-index:-1; left:-3px; right:-4px; bottom:2px; height:13px;
+  background:var(--mustard); opacity:.55; transform:rotate(-1.1deg);
+  clip-path:polygon(0 35%, 100% 0, 98% 78%, 2% 100%);
+}
+.hero__title em{font-family:var(--display); font-style:normal; color:var(--red); font-weight:900}
+.hero__text{font-size:14px; line-height:1.9; color:var(--ink-2); margin:0 0 18px; max-width:560px}
+.hero__text b{color:var(--ink); background:linear-gradient(transparent 62%, rgba(227,178,60,.55) 62%)}
+.hero__stats{display:flex; gap:0; flex-wrap:wrap; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); width:fit-content}
+.hero__stat{padding:8px 18px 7px; border-right:1px dashed var(--line); display:flex; align-items:baseline; gap:6px}
+.hero__stat:first-child{padding-left:0}
+.hero__stat:last-child{border-right:0}
+.hero__stat b{font-family:var(--display); font-size:25px; line-height:1}
+.hero__stat span{font-size:10px; letter-spacing:.1em; color:var(--muted); font-family:var(--mono)}
+.hero__art{position:relative; transform:rotate(1.4deg); filter:drop-shadow(0 16px 24px rgba(60,42,18,.18))}
+.hero__art svg{display:block; width:100%; height:auto}
+.art-tape{position:absolute; width:96px; height:26px; background:#dfb9a2; opacity:.8; top:-8px; left:36px; transform:rotate(-8deg); clip-path:polygon(3% 10%,98% 0,100% 86%,96% 100%,2% 95%,0 74%); box-shadow:0 2px 4px rgba(0,0,0,.1)}
+
+/* ---------- section heads ---------- */
+.section-head{display:flex; align-items:baseline; gap:12px; border-bottom:2px solid var(--ink); padding-bottom:7px; margin-bottom:16px; flex-wrap:wrap}
+.section-num{
+  font-family:var(--display); font-style:italic; font-weight:900; font-size:30px; line-height:.8;
+  color:transparent; -webkit-text-stroke:1.2px var(--red); letter-spacing:-.02em;
+}
+.section-head h2{margin:0; font-size:25px; letter-spacing:.05em; font-weight:900}
+.section-note{margin-left:auto; font-family:var(--mono); font-size:9.5px; letter-spacing:.13em; color:var(--muted); text-transform:uppercase}
+.section-head--ranking .live-stamp{margin-left:auto}
+.live-stamp{
+  font-family:var(--mono); font-size:9px; letter-spacing:.1em; padding:4px 8px;
+  border:1px solid var(--teal); color:var(--teal-deep); transform:rotate(-1.5deg);
+  background:rgba(143,182,196,.16);
+}
+
+/* ---------- toolbox ---------- */
+.toolbox{padding:26px 0 4px}
+.plan-tabs{display:flex; flex-wrap:wrap; gap:12px 10px; padding:5px 2px 10px}
+.plan-tab{
+  position:relative; border:1px solid var(--line); background:var(--paper-hi);
+  display:flex; align-items:center; gap:9px; padding:9px 12px 8px;
+  font-family:var(--sans); color:var(--ink); cursor:pointer; text-align:left;
+  box-shadow:0 2px 0 rgba(60,44,22,.07); transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  transform:rotate(var(--tilt,0deg)); min-width:148px; min-height:56px; flex:1 1 148px; max-width:205px;
+}
+.plan-tab:nth-child(3n+1){--tilt:-.7deg}
+.plan-tab:nth-child(3n+2){--tilt:.45deg}
+.plan-tab:nth-child(3n){--tilt:-.25deg}
+.plan-tab::after{content:""; position:absolute; left:8px; right:8px; bottom:3px; height:2px; background:var(--line-soft); opacity:.7}
+.plan-tab:hover{transform:rotate(0) translateY(-2px); box-shadow:var(--shadow-sm)}
+.plan-tab.is-active{
+  background:var(--brand-bg); border-color:var(--brand-deep);
+  box-shadow:0 0 0 1.5px var(--brand-deep), 4px 6px 0 rgba(60,44,22,.12);
+  transform:rotate(0) translateY(-2px);
+}
+.plan-tab.is-active::before{
+  content:""; position:absolute; top:-7px; left:50%; width:46px; height:14px; transform:translateX(-50%) rotate(-2deg);
+  background:rgba(227,201,120,.85); box-shadow:0 1px 3px rgba(0,0,0,.08);
+}
+.plan-tab__mark{
+  width:30px; height:30px; flex:0 0 30px; border-radius:50%; display:grid; place-items:center;
+  background:var(--brand); color:#fff8ea; font-family:var(--mono); font-size:9.5px; letter-spacing:0;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);
+}
+.plan-tab__body{display:flex; flex-direction:column; min-width:0; line-height:1.25}
+.plan-tab__body b{font-size:12px; white-space:normal; overflow:hidden; text-overflow:ellipsis; font-weight:700; line-height:1.15}
+.plan-tab__body small{font-family:var(--mono); font-size:8px; color:var(--muted); letter-spacing:.01em; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.plan-tab__price{margin-left:auto; font-family:var(--mono); font-size:9px; color:var(--brand-deep); background:rgba(255,255,255,.55); padding:3px 4px; border:1px dashed rgba(60,44,22,.22); line-height:1.15; text-align:center; flex:0 0 auto}
+.plan-tab__price b{display:block; font-size:10.5px; color:var(--ink)}
+.filters{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; border-top:1px dashed var(--line); border-bottom:1px dashed var(--line); padding:10px 2px; margin-top:2px}
+.filter-group{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.filter-label{font-family:var(--mono); font-size:9px; letter-spacing:.13em; color:var(--muted); text-transform:uppercase}
+.channel-toggles{display:flex; gap:6px; flex-wrap:wrap}
+.channel-chip{
+  display:inline-flex; align-items:center; gap:6px; padding:5px 9px 5px 6px;
+  border:1px solid var(--line); background:rgba(255,252,242,.5); cursor:pointer;
+  font-family:var(--sans); font-size:11px; color:var(--muted);
+  transition:all .15s ease; position:relative;
+}
+.channel-chip .ch-icon{width:18px; height:18px; border-radius:50%; display:grid; place-items:center; background:#e7ddc9; color:#7b6d58}
+.channel-chip .ch-icon svg{width:11px; height:11px}
+.channel-chip.is-on{background:#fffdf7; border-color:var(--ink-2); color:var(--ink); box-shadow:2px 2px 0 rgba(60,44,22,.1)}
+.channel-chip.is-on .ch-icon{background:var(--teal); color:#fff8ea}
+.channel-chip.is-on[data-mode="apple"] .ch-icon{background:var(--ink); color:#fff8ea}
+.channel-chip.is-on[data-mode="google"] .ch-icon{background:var(--red); color:#fff8ea}
+.channel-chip.is-on[data-mode="all"] .ch-icon{background:var(--mustard-deep); color:#fff8ea}
+.channel-chip:disabled{opacity:.4; cursor:not-allowed}
+.switch{display:inline-flex; align-items:center; gap:7px; cursor:pointer; font-family:var(--sans); font-size:11px; color:var(--ink-2); user-select:none}
+.switch input{position:absolute; opacity:0; pointer-events:none}
+.switch__track{width:30px; height:17px; border-radius:10px; background:#cfc2a9; border:1px solid rgba(60,44,22,.25); position:relative; transition:.2s}
+.switch__track::after{content:""; position:absolute; width:11px; height:11px; border-radius:50%; background:#fff9ec; top:2px; left:2px; transition:.2s; box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.switch input:checked + .switch__track{background:var(--teal)}
+.switch input:checked + .switch__track::after{left:15px}
+.switch input:focus-visible + .switch__track{outline:2px solid var(--red); outline-offset:2px}
+.search{display:inline-flex; align-items:center; gap:6px; border-bottom:1px solid var(--line); padding:3px 2px; background:transparent}
+.search svg{width:12px; height:12px; color:var(--muted)}
+.search input{border:0; background:transparent; font-family:var(--sans); font-size:11px; color:var(--ink); outline:none; width:92px}
+.search input::placeholder{color:#a3957f}
+.btn{
+  border:1px solid var(--ink-2); background:var(--paper-hi); color:var(--ink);
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; padding:7px 10px;
+  cursor:pointer; box-shadow:2px 2px 0 rgba(60,44,22,.14); transition:.15s; text-transform:uppercase;
+}
+.btn:hover{background:var(--mustard); transform:translate(-1px,-1px); box-shadow:3px 3px 0 rgba(60,44,22,.16)}
+.btn:active{transform:translate(1px,1px); box-shadow:1px 1px 0 rgba(60,44,22,.14)}
+
+/* ---------- summary tickets ---------- */
+.summary{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; padding:18px 0 22px}
+.ticket{
+  position:relative; padding:11px 13px 10px; border:1px solid rgba(60,44,22,.18);
+  box-shadow:var(--shadow-sm); min-height:88px; overflow:hidden;
+  transform:rotate(var(--tilt,0deg));
+}
+.ticket::after{content:""; position:absolute; right:-14px; bottom:-20px; width:72px; height:72px; border-radius:50%; border:1px dashed rgba(29,26,22,.2); opacity:.55}
+.ticket__label{font-family:var(--mono); font-size:8.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(29,26,22,.65); display:flex; align-items:center; gap:5px}
+.ticket__label i{width:5px; height:5px; background:currentColor; display:inline-block; transform:rotate(45deg)}
+.ticket__value{font-family:var(--serif); font-weight:900; font-size:clamp(21px,2.2vw,29px); line-height:1.1; margin-top:5px; display:flex; align-items:baseline; gap:6px}
+.ticket__value small{font-family:var(--mono); font-size:10px; font-weight:400; opacity:.7}
+.ticket__sub{font-size:10.5px; color:rgba(29,26,22,.72); margin-top:4px; line-height:1.4; font-family:var(--sans)}
+.ticket--mustard{background:linear-gradient(135deg,#f0c75e,#e3b23c)}
+.ticket--teal{background:linear-gradient(135deg,#cfe0da,#a9c9c1)}
+.ticket--coral{background:linear-gradient(135deg,#f3c8b8,#e6a48d)}
+.ticket--cream{background:linear-gradient(135deg,#fbf5e6,#eee2cb)}
+.ticket:nth-child(1){--tilt:-.6deg}
+.ticket:nth-child(2){--tilt:.45deg}
+.ticket:nth-child(3){--tilt:-.3deg}
+.ticket:nth-child(4){--tilt:.6deg}
+
+/* ---------- board layout ---------- */
+.board-grid{display:grid; grid-template-columns:minmax(0,1fr) 336px; gap:24px; align-items:start; padding-top:4px}
+
+/* ---------- ranking ---------- */
+.ranking{
+  position:relative; background:var(--paper-hi); border:1px solid var(--line);
+  padding:16px 18px 12px; box-shadow:var(--shadow);
+}
+.ranking::before{
+  content:""; position:absolute; top:-9px; left:50px; width:94px; height:20px;
+  background:rgba(184,206,196,.78); transform:rotate(-2.6deg);
+  clip-path:polygon(2% 8%,98% 0,100% 88%,96% 100%,3% 96%,0 78%);
+}
+.ranking__head{
+  display:grid; grid-template-columns:52px minmax(150px,1.35fr) minmax(92px,.8fr) minmax(96px,.75fr) minmax(110px,.9fr);
+  gap:8px; padding:0 8px 7px; border-bottom:1px solid var(--ink);
+  font-family:var(--mono); font-size:8.5px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase;
+}
+.ranking__head span:nth-child(4),.ranking__head span:nth-child(5){text-align:right}
+.ranking__list{display:flex; flex-direction:column}
+.rank-row{
+  position:relative; border-bottom:1px dashed var(--line);
+  display:grid; grid-template-columns:52px minmax(150px,1.35fr) minmax(92px,.8fr) minmax(96px,.75fr) minmax(110px,.9fr);
+  gap:8px; align-items:center; padding:10px 8px 9px; cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0));
+  transition:background .15s ease, transform .15s ease;
+}
+.rank-row:hover{background:#fffdf6; transform:translateX(2px)}
+.rank-row.is-open{background:#fffdf6}
+.rank-row::after{
+  content:""; position:absolute; left:0; bottom:-1px; height:2px; width:var(--bar,0%);
+  background:linear-gradient(90deg,var(--bar-color,var(--teal)),transparent);
+  opacity:.65; border-radius:2px;
+}
+.rank-row.is-first{background:linear-gradient(90deg,rgba(227,178,60,.16),rgba(255,255,255,0) 42%)}
+.rank-row:nth-child(2){background:linear-gradient(90deg,rgba(143,182,196,.14),rgba(255,255,255,0) 44%)}
+.rank-row:nth-child(3){background:linear-gradient(90deg,rgba(217,120,86,.11),rgba(255,255,255,0) 44%)}
+.rank-row:nth-child(2):hover,.rank-row:nth-child(3):hover{background:#fffdf6}
+.best-tag{
+  background:var(--red); color:#fff7e8; font-family:var(--mono); font-size:7px; letter-spacing:.06em;
+  padding:2px 5px; transform:rotate(-1.5deg); box-shadow:1px 1px 0 rgba(0,0,0,.12); white-space:nowrap;
+}
+.rank-pos{display:flex; flex-direction:column; align-items:center; gap:2px}
+.rank-num{font-family:var(--display); font-weight:900; font-style:italic; font-size:25px; line-height:.9; letter-spacing:-.04em}
+.rank-row:nth-child(1) .rank-num{color:var(--red)}
+.rank-row:nth-child(2) .rank-num{color:#8a7a5c}
+.rank-row:nth-child(3) .rank-num{color:#a9713e}
+.rank-medal{font-family:var(--mono); font-size:6.5px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase}
+.rank-region{display:flex; align-items:center; gap:9px; min-width:0}
+.flag-chip{
+  position:relative; width:34px; height:34px; flex:0 0 34px; border-radius:50%;
+  display:grid; place-items:center; overflow:hidden;
+  border:1px solid rgba(29,26,22,.3); box-shadow:inset 0 0 0 2px rgba(255,255,255,.4);
+  background:linear-gradient(90deg,var(--c1) 0 33%,var(--c2) 33% 66%,var(--c3) 66% 100%);
+}
+.flag-chip span{
+  font-family:var(--mono); font-size:8px; letter-spacing:.02em; color:var(--ink);
+  background:rgba(255,252,242,.84); padding:1px 3px; border:1px solid rgba(29,26,22,.25); line-height:1.2; z-index:1;
+}
+.rank-region__name{min-width:0}
+.rank-region__name b{display:block; font-size:16.5px; line-height:1.15; letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.rank-region__name small{display:block; font-family:var(--mono); font-size:7.5px; color:var(--muted); letter-spacing:.05em; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.channel-badge{
+  display:inline-flex; align-items:center; gap:4px; padding:2px 6px 2px 3px;
+  background:#f1e9d8; border:1px solid rgba(29,26,22,.2); font-family:var(--sans); font-size:9.5px; line-height:1.5; white-space:nowrap;
+}
+.channel-badge .ch-icon{width:15px; height:15px; border-radius:50%; display:grid; place-items:center; background:var(--teal); color:#fff8ea}
+.channel-badge .ch-icon svg{width:9px; height:9px}
+.channel-badge[data-channel="apple"] .ch-icon{background:var(--ink)}
+.channel-badge[data-channel="google"] .ch-icon{background:var(--red)}
+.channel-cell{display:flex; align-items:center; gap:4px; flex-wrap:wrap}
+.conf{
+  display:inline-grid; place-items:center; width:14px; height:14px; border-radius:50%;
+  font-family:var(--mono); font-size:7px; border:1px solid currentColor; line-height:1;
+}
+.conf--verified{color:var(--green); background:rgba(63,122,82,.1)}
+.conf--estimated{color:var(--mustard-deep); background:rgba(227,178,60,.14)}
+.conf--base{color:var(--teal); background:rgba(47,111,106,.1)}
+.rank-local{text-align:right; min-width:0}
+.rank-local b{display:block; font-family:var(--mono); font-size:12.5px; font-weight:400; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.rank-local small{display:block; font-family:var(--mono); font-size:7.5px; color:var(--muted); letter-spacing:.04em; margin-top:2px}
+.rank-cny{text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:1px}
+.rank-cny b{font-family:var(--serif); font-weight:900; font-size:22px; line-height:1; letter-spacing:-.01em}
+.rank-cny b sup{font-family:var(--mono); font-size:8px; font-weight:400; vertical-align:super; margin-right:1px; color:var(--muted)}
+.rank-save{font-family:var(--mono); font-size:7.5px; letter-spacing:.02em; color:var(--green); white-space:nowrap}
+.rank-save.is-high{color:var(--red)}
+.rank-arrow{position:absolute; right:6px; bottom:4px; font-family:var(--mono); font-size:8px; color:var(--muted); opacity:.5; transition:.2s}
+.rank-row.is-open .rank-arrow{transform:rotate(180deg)}
+/* inline receipt */
+.rank-detail{
+  grid-column:1/-1; overflow:hidden; max-height:0; opacity:0;
+  transition:max-height .28s ease, opacity .2s ease, padding .2s ease;
+  padding:0 8px;
+}
+.rank-row.is-open .rank-detail{max-height:340px; opacity:1; padding:10px 8px 4px}
+.receipt{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px;
+  border-top:1px dashed var(--line); padding-top:9px;
+}
+.receipt__item{position:relative; border:1px solid var(--line-soft); background:#fffdf6; padding:7px 8px 6px; cursor:default}
+.receipt__item.is-cheapest{border-color:var(--teal); box-shadow:inset 0 0 0 1px rgba(47,111,106,.25)}
+.receipt__item.is-cheapest::after{
+  content:attr(data-tag); position:absolute; left:-1px; top:-1px; background:var(--teal); color:#fff8ea;
+  font-family:var(--mono); font-size:6.5px; padding:2px 4px; letter-spacing:.08em;
+}
+.receipt__item.is-muted{opacity:.52; filter:grayscale(.35)}
+.receipt__item.is-muted.is-cheapest::after{display:none}
+.ref-tag{font-family:var(--mono); font-size:6.5px; color:var(--muted); border:1px solid var(--line); padding:0 3px; margin-left:auto; line-height:1.35}
+.receipt__head{display:flex; align-items:center; gap:4px; font-family:var(--mono); font-size:8px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase}
+.receipt__head .conf{margin-left:auto}
+.receipt__price{display:flex; align-items:baseline; justify-content:space-between; gap:4px; margin-top:3px}
+.receipt__price b{font-family:var(--mono); font-weight:400; font-size:11px}
+.receipt__price span{font-family:var(--serif); font-weight:900; font-size:15px}
+.receipt__meta{font-family:var(--sans); font-size:8.5px; color:var(--muted); line-height:1.4; margin-top:2px; display:flex; justify-content:space-between; gap:4px; flex-wrap:wrap}
+.receipt__meta a{color:var(--teal-deep); text-decoration:none; border-bottom:1px dotted var(--teal)}
+.receipt__note{grid-column:1/-1; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; font-family:var(--mono); font-size:7.5px; color:var(--muted); letter-spacing:.02em; padding-top:1px}
+.ranking__foot{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid var(--ink); margin-top:8px; padding-top:7px; font-family:var(--mono); font-size:8px; letter-spacing:.04em; color:var(--muted)}
+.legend{display:inline-flex; align-items:center; gap:4px}
+.legend .dot{width:7px; height:7px; border-radius:50%; display:inline-block; margin-left:5px; border:1px solid currentColor}
+.dot--verified{background:rgba(63,122,82,.3); color:var(--green)}
+.dot--estimated{background:rgba(227,178,60,.35); color:var(--mustard-deep)}
+.dot--base{background:rgba(47,111,106,.25); color:var(--teal)}
+
+/* ---------- sidebar ---------- */
+.sidebar{display:flex; flex-direction:column; gap:18px}
+.ladder{
+  position:relative; color:#f1ead9; background:
+    radial-gradient(ellipse at 20% 0%, rgba(255,255,255,.1), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px),
+    #202b26;
+  padding:14px 15px 11px; box-shadow:var(--shadow); border:1px solid #101a15;
+  transform:rotate(-.35deg);
+}
+.ladder::before{
+  content:""; position:absolute; left:28px; top:-8px; width:70px; height:17px; background:rgba(227,178,60,.75);
+  transform:rotate(-2deg); clip-path:polygon(2% 10%,98% 0,100% 90%,95% 100%,4% 94%,0 75%);
+}
+.ladder__head{display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-top:2px}
+.ladder__kicker{font-family:var(--mono); font-size:7.5px; letter-spacing:.15em; color:#d9b86a}
+.ladder h2{margin:2px 0 0; font-size:30px; line-height:1; letter-spacing:.08em; color:#f7f0df; font-family:var(--serif)}
+.ladder__live{display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:8px; letter-spacing:.08em; color:#bfd7c4; border:1px solid rgba(191,215,196,.35); padding:3px 6px; transform:rotate(1.5deg)}
+.ladder__source{font-family:var(--sans); font-size:8.5px; line-height:1.5; color:#aebcb2; margin:6px 0 10px; padding-bottom:8px; border-bottom:1px dashed rgba(241,234,217,.25)}
+.ladder__source a{color:#e8c97e; text-decoration:none; border-bottom:1px dotted #e8c97e}
+.ladder__tabs{display:flex; gap:4px; margin-bottom:7px}
+.ladder__tab{
+  flex:1; border:1px solid rgba(241,234,217,.22); background:transparent; color:#c9d4c9;
+  font-family:var(--mono); font-size:8px; letter-spacing:.08em; padding:4px 2px; cursor:pointer; transition:.15s;
+}
+.ladder__tab.is-active{background:#f1ead9; color:#202b26; border-color:#f1ead9}
+.ladder__list{display:flex; flex-direction:column; gap:0}
+.ladder-row{display:grid; grid-template-columns:19px minmax(0,1fr) 42px; gap:4px; align-items:center; padding:5px 0; border-bottom:1px solid rgba(241,234,217,.12)}
+.ladder-row:last-child{border-bottom:0}
+.ladder-row__rank{font-family:var(--display); font-style:italic; font-size:14px; color:#9ba99d; text-align:center; line-height:1}
+.ladder-row:nth-child(1) .ladder-row__rank{color:#f0c75e}
+.ladder-row:nth-child(2) .ladder-row__rank{color:#d8cbb2}
+.ladder-row:nth-child(3) .ladder-row__rank{color:#d59a6d}
+.ladder-row__model{min-width:0}
+.ladder-row__model b{display:block; font-family:var(--sans); font-size:10px; font-weight:600; color:#f6efdf; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.ladder-row__model small{display:block; font-family:var(--mono); font-size:7px; color:#93a397; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.ladder-row__score{text-align:right; font-family:var(--mono); font-size:11px; color:#f0c75e; line-height:1.1}
+.ladder-row__score small{display:block; font-size:6px; color:#93a397; letter-spacing:.06em; margin-top:1px}
+.ladder-row__bar{grid-column:2/4; height:2px; background:rgba(241,234,217,.14); margin-top:1px; position:relative; overflow:hidden}
+.ladder-row__bar i{position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg,#7aa58b,#e3b23c); width:var(--w,0%); transition:width .6s ease}
+.ladder__foot{display:flex; justify-content:space-between; align-items:center; gap:6px; border-top:1px dashed rgba(241,234,217,.25); margin-top:8px; padding-top:6px; font-family:var(--mono); font-size:7px; color:#93a397; letter-spacing:.04em}
+.ladder__foot button{background:transparent; border:1px solid rgba(241,234,217,.28); color:#d9e2d8; font-family:var(--mono); font-size:7px; padding:3px 6px; cursor:pointer}
+.ladder__foot button:hover{background:rgba(241,234,217,.12)}
+.ladder__hint{font-family:var(--hand); font-size:11px; color:#e8c97e; line-height:1.4; transform:rotate(-1.4deg); margin:7px 0 0; text-align:right}
+
+.fx-card{
+  position:relative; background:linear-gradient(140deg,#f0c75e,#e3b23c); padding:12px 13px 10px;
+  box-shadow:var(--shadow-sm); transform:rotate(.45deg); border:1px solid rgba(90,66,34,.16);
+}
+.fx-card::before{
+  content:""; position:absolute; right:-9px; top:-8px; width:52px; height:16px; background:rgba(255,255,255,.4);
+  transform:rotate(32deg); border:1px solid rgba(255,255,255,.35);
+}
+.fx-card__head{display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(29,26,22,.35); padding-bottom:4px; margin-bottom:7px}
+.fx-card__head h2{margin:0; font-size:17px; letter-spacing:.08em}
+.fx-card__head span{font-family:var(--mono); font-size:7.5px; letter-spacing:.1em; color:rgba(29,26,22,.65)}
+.fx-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 12px}
+.fx-line{display:flex; justify-content:space-between; align-items:baseline; font-family:var(--mono); font-size:9px; padding:3px 0; border-bottom:1px dotted rgba(29,26,22,.22); gap:6px}
+.fx-line span:first-child{letter-spacing:.04em; color:rgba(29,26,22,.72)}
+.fx-line b{font-weight:400; font-size:10.5px}
+.fx-line .fx-delta{font-size:7px; min-width:28px; text-align:right}
+.fx-delta.up{color:var(--red-deep)}
+.fx-delta.down{color:var(--green)}
+.fx-delta.flat{color:rgba(29,26,22,.55)}
+.fx-card__foot{display:flex; justify-content:space-between; align-items:center; gap:6px; margin-top:7px; font-family:var(--mono); font-size:7px; color:rgba(29,26,22,.65); letter-spacing:.03em}
+.fx-card__foot button{background:rgba(255,252,242,.45); border:1px solid rgba(29,26,22,.35); font-family:var(--mono); font-size:7px; padding:2px 6px; cursor:pointer; color:var(--ink)}
+.fx-card__foot button:hover{background:#fff8e8}
+
+/* channel average card */
+.spread-card{
+  position:relative; background:var(--paper-hi); border:1px solid var(--line);
+  padding:12px 13px 10px; box-shadow:var(--shadow-sm); transform:rotate(-.25deg);
+}
+.spread-card::before{
+  content:""; position:absolute; top:-7px; right:18px; width:58px; height:15px;
+  background:rgba(217,120,86,.38); transform:rotate(3deg);
+  clip-path:polygon(2% 8%,98% 0,100% 88%,96% 100%,3% 96%,0 78%);
+}
+.spread-card__head{display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--ink); padding-bottom:4px; margin-bottom:6px}
+.spread-card__head h2{margin:0; font-size:14.5px; letter-spacing:.07em}
+.spread-card__head span{font-family:var(--mono); font-size:7px; letter-spacing:.1em; color:var(--muted)}
+.spread-row{display:grid; grid-template-columns:38px minmax(0,1fr) 55px; gap:7px; align-items:center; margin:5px 0; font-family:var(--mono); font-size:8px; color:var(--ink-2)}
+.spread-row b{text-align:right; font-weight:400; font-size:9.5px; color:var(--ink)}
+.spread-row__track{height:8px; background:#eadfc9; border:1px solid rgba(60,44,22,.16); position:relative; overflow:hidden}
+.spread-row__track::after{content:""; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 7px,rgba(255,255,255,.18) 7px 8px); pointer-events:none}
+.spread-row__track i{display:block; height:100%; transition:width .5s ease}
+.spread-card__note{font-family:var(--sans); font-size:8px; line-height:1.5; color:var(--muted); margin:5px 0 0; border-top:1px dotted var(--line); padding-top:4px}
+
+/* takeaway card */
+.takeaway-card{
+  position:relative; background:var(--paper-hi); border:1px solid var(--line);
+  padding:12px 13px 11px; box-shadow:var(--shadow-sm); transform:rotate(.25deg);
+}
+.takeaway-card::before{
+  content:""; position:absolute; left:16px; top:-7px; width:46px; height:14px;
+  background:rgba(184,206,196,.85); transform:rotate(-3deg);
+  clip-path:polygon(2% 8%,98% 0,100% 88%,96% 100%,3% 96%,0 78%);
+}
+.takeaway-card__head{display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--ink); padding-bottom:4px; margin-bottom:7px}
+.takeaway-card__head h2{margin:0; font-size:14.5px; letter-spacing:.06em}
+.takeaway-card__head span{font-family:var(--mono); font-size:7px; letter-spacing:.1em; color:var(--muted)}
+#takeaway-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+#takeaway-list li{display:flex; gap:8px; align-items:flex-start}
+.tk-num{font-family:var(--display); font-style:italic; font-weight:900; font-size:18px; line-height:1; color:var(--red); min-width:20px; padding-top:1px}
+.tk-body{min-width:0}
+.tk-body b{display:block; font-family:var(--sans); font-size:10px; line-height:1.55; color:var(--ink); font-weight:600}
+.tk-body small{display:block; font-family:var(--sans); font-size:8px; line-height:1.45; color:var(--muted); margin-top:1px}
+
+.note-card{
+  position:relative; background:var(--paper-hi); border:1px solid var(--line); padding:15px 14px 12px;
+  box-shadow:var(--shadow-sm);
+}
+.note-card__tape{position:absolute; top:-8px; left:18px; width:64px; height:17px; background:rgba(184,206,196,.8); transform:rotate(-3deg); clip-path:polygon(2% 8%,98% 0,100% 88%,96% 100%,3% 96%,0 78%)}
+.note-card h2{margin:4px 0 7px; font-size:15px; letter-spacing:.08em; border-bottom:1px solid var(--line); padding-bottom:5px}
+.note-card p{font-size:11.5px; line-height:1.8; color:var(--ink-2); margin:0 0 8px}
+.note-card p b{background:linear-gradient(transparent 65%,rgba(227,178,60,.6) 65%)}
+.note-card__sign{font-family:var(--hand); text-align:right; color:var(--red); font-size:13px; margin-top:4px}
+
+/* ---------- method / sources ---------- */
+.method{margin-top:30px; border-top:4px solid var(--ink); padding-top:14px}
+.method__head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+.method__head h2{margin:0; font-size:22px; letter-spacing:.06em}
+.method__head span{font-family:var(--mono); font-size:8.5px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase}
+.method__grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px}
+.method__box{border-top:1px solid var(--line); padding-top:9px}
+.method__box h3{font-family:var(--mono); font-size:9px; letter-spacing:.12em; margin:0 0 6px; color:var(--red); text-transform:uppercase}
+.method__box p{font-size:11px; line-height:1.85; color:var(--ink-2); margin:0 0 6px}
+.method__box p:last-child{margin-bottom:0}
+.sources{margin-top:18px; border-top:1px dashed var(--line); padding-top:10px; columns:2; column-gap:28px}
+.source-item{break-inside:avoid; display:flex; gap:8px; padding:5px 0; font-size:10.5px; line-height:1.55; color:var(--ink-2)}
+.source-item .source-num{font-family:var(--mono); font-size:8px; color:var(--red); padding-top:2px; min-width:16px}
+.source-item a{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line); font-weight:600}
+.source-item a:hover{border-bottom-color:var(--red); color:var(--red)}
+.source-item small{display:block; color:var(--muted); font-size:9px; margin-top:1px; line-height:1.45}
+
+footer{
+  margin-top:26px; background:var(--ink); color:#e9dfca; padding:12px 16px;
+  display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:8.5px; letter-spacing:.08em;
+  transform:rotate(-.2deg); box-shadow:0 4px 0 rgba(29,26,22,.12);
+}
+footer b{color:var(--mustard); font-weight:400}
+.footer__note{color:#a79b85; font-size:7.5px; letter-spacing:.03em}
+
+/* ---------- misc ---------- */
+.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+a{color:var(--teal-deep)}
+:focus-visible{outline:2px solid var(--red); outline-offset:2px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important}
+  .ticker__inner{flex-wrap:wrap}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .board-grid{grid-template-columns:minmax(0,1fr) 300px}
+  .masthead__main{grid-template-columns:140px minmax(0,1fr) 150px}
+  .hero{grid-template-columns:minmax(0,1fr) minmax(300px,.8fr); gap:16px}
+}
+@media (max-width:920px){
+  .page{width:calc(100% - 24px); padding:20px 20px 28px; margin:16px auto 40px}
+  .masthead__main{grid-template-columns:1fr; gap:8px}
+  .masthead__side--left{display:none}
+  .masthead__side--right{flex-direction:row; justify-content:center; align-items:center; min-height:0; gap:14px}
+  .scribble{text-align:left; max-width:none; font-size:11.5px}
+  .hero{grid-template-columns:1fr; gap:18px}
+  .hero__art{max-width:520px; margin:0 auto; width:100%}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .board-grid{grid-template-columns:1fr}
+  .sidebar{display:grid; grid-template-columns:1fr 1fr; align-items:start}
+  .note-card{grid-column:1/-1}
+  .method__grid{grid-template-columns:1fr; gap:12px}
+  .sources{columns:1}
+}
+@media (max-width:680px){
+  .page{width:calc(100% - 12px); padding:16px 12px 22px; margin:8px auto 24px}
+  .tape--tl,.tape--tr,.paperclip{display:none}
+  .masthead__meta{font-size:8px; gap:7px; letter-spacing:.08em; justify-content:space-between}
+  .masthead__meta span:nth-child(2),
+  .masthead__meta span:nth-child(3),
+  .masthead__meta .grow{display:none}
+  .masthead__cn{font-size:clamp(23px,7.2vw,38px); white-space:nowrap; letter-spacing:.03em}
+  .masthead__ai{padding:1px 7px 3px; margin-right:5px; transform:rotate(-2deg) translateY(-2px); border-width:1.5px; outline-width:1.5px}
+  .masthead__en{letter-spacing:.24em; font-size:8px}
+  .masthead__lede{font-size:12px; line-height:1.8; text-align:left}
+  .hero__title{font-size:26px}
+  .hero__stats{width:100%; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); justify-content:stretch}
+  .hero__stat{padding:6px 4px; flex-direction:column; align-items:flex-start; gap:1px; border-right:1px dashed var(--line)}
+  .hero__stat:first-child{padding-left:4px}
+  .hero__stat:last-child{border-right:0}
+  .hero__stat b{font-size:19px}
+  .hero__stat span{font-size:8px; letter-spacing:.04em}
+  .takeaway-card,.spread-card{transform:none}
+  .ticker{margin-left:-12px; margin-right:-12px}
+  .ticker__label{display:none}
+  .toolbox{padding-top:20px}
+  .plan-tabs{gap:7px}
+  .plan-tab{flex:1 1 calc(50% - 7px); max-width:none; min-width:0; padding:8px 9px; min-height:54px}
+  .plan-tab:last-child:nth-child(odd){flex-basis:100%; max-width:none}
+  .plan-tab__price{display:none}
+  .section-note{display:none}
+  .section-head--ranking .live-stamp{margin-left:auto; font-size:7px; padding:3px 5px}
+  .filters{align-items:flex-start; gap:9px}
+  .filter-group{width:100%}
+  .filter-group:last-child{justify-content:space-between}
+  .summary{gap:8px; padding:12px 0 16px}
+  .ticket{padding:9px 10px; min-height:78px}
+  .ticket__value{font-size:20px}
+  .ranking{padding:13px 10px 10px}
+  .ranking__head{display:none}
+  .rank-row{grid-template-columns:42px minmax(0,1fr) auto; grid-template-rows:auto auto; gap:2px 7px; padding:9px 4px 8px}
+  .rank-pos{grid-row:1/3}
+  .rank-region{grid-column:2; grid-row:1}
+  .rank-cny{grid-column:3; grid-row:1; align-self:center}
+  .rank-cny b{font-size:20px}
+  .rank-local{grid-column:2; grid-row:2; text-align:left; display:flex; align-items:baseline; gap:5px}
+  .rank-local b{font-size:10.5px}
+  .rank-local small{margin-top:0}
+  .channel-cell{grid-column:2/4; grid-row:3; gap:4px; justify-content:flex-start}
+  .receipt{grid-template-columns:1fr; gap:6px; max-height:none}
+  .rank-row.is-open .rank-detail{max-height:600px}
+  .rank-save{font-size:7px}
+  .sidebar{grid-template-columns:1fr; gap:14px}
+  .ladder{transform:none}
+  .fx-card{transform:none}
+  .spread-card{transform:none}
+  .ladder h2{font-size:27px}
+  .masthead__side--right{display:none}
+  footer{font-size:7px; padding:10px 12px}
+  .footer__note{display:none}
+  .method__grid{gap:10px}
+}
+@media print{
+  body{background:#fff}
+  .page{width:100%; margin:0; box-shadow:none; border:0; outline:0}
+  .grain,.tape,.paperclip,.toolbox,.sidebar,.ticker__status,.rank-arrow{display:none !important}
+  .ticker{display:none}
+  .hero__art{display:none}
+  .hero{grid-template-columns:1fr; border-bottom:2px solid #000}
+  .board-grid{display:block}
+  .ranking{box-shadow:none; border:1px solid #000}
+  .rank-detail{display:none}
+  .method,.sources{page-break-inside:avoid}
+}
+
+
+
+</style>
+<style id="ipad-enhancements">
+/* iPad / PWA enhancements (generated) */
+html { -webkit-text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+@media (pointer: coarse) {
+  .channel-chip { min-height: 34px; padding: 7px 10px; font-size: 12px; }
+  .rank-row { padding-top: 12px; padding-bottom: 11px; }
+  .plan-tab { min-height: 60px; }
+  .search input { font-size: 16px; }
+  .btn { padding: 9px 11px; }
+}
+@media (display-mode: standalone) {
+  body { background-color: #f4ecdc; }
+}
+@media (max-width: 1080px) {
+  .hero__stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: 100%; }
+  .hero__stat { padding: 7px 8px; flex-direction: column; align-items: flex-start; gap: 1px; }
+  .hero__stat b { font-size: 22px; }
+  .hero__stat span { font-size: 8px; letter-spacing: .04em; }
+}
+@media (max-width: 920px) {
+  .tape--tl, .tape--tr, .paperclip { display: none; }
+}
+@supports (padding: max(0px)) {
+  body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="page">
+  <span class="tape tape--tl" aria-hidden="true"></span>
+  <span class="tape tape--tr" aria-hidden="true"></span>
+  <span class="tape tape--bl" aria-hidden="true"></span>
+  <svg class="paperclip" viewBox="0 0 40 90" fill="none" aria-hidden="true">
+    <path d="M27 82c-7 6-18 2-19-7-1-8 5-14 12-22l13-15c4-5 3-12-2-15-5-3-11-1-14 3L5 43" stroke="#b9b0a0" stroke-width="5" stroke-linecap="round"/>
+    <path d="M27 82c-7 6-18 2-19-7-1-8 5-14 12-22l13-15c4-5 3-12-2-15-5-3-11-1-14 3L5 43" stroke="#f7f2e6" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+  </svg>
+
+  <header class="masthead">
+    <div class="masthead__meta">
+      <span>VOL. 2026 · NO. 11</span>
+      <span>·</span>
+      <span>全球 AI 订阅价格特刊</span>
+      <span class="grow"></span>
+      <span>2026 年 11 月 8 日 · 星期日</span>
+      <span>·</span>
+      <span>汇率 <b>自动</b> 拉取</span>
+    </div>
+    <div class="masthead__rule"></div>
+    <div class="masthead__main">
+      <div class="masthead__side masthead__side--left">
+        <div class="weather">
+          <div class="weather__label">Exchange Weather</div>
+          <div class="weather__value">USD / CNY <b id="mast-usd">6.6908</b></div>
+          <div class="weather__sub">牌价 <span id="fx-time-short">同步中</span></div>
+        </div>
+        <div class="stamp" aria-hidden="true">汇率<br>自动</div>
+      </div>
+      <h1 class="masthead__title">
+        <span class="masthead__cn"><span class="masthead__ai">AI</span>会员全球比价日报</span>
+        <span class="masthead__en">The AI Price Gazette</span>
+      </h1>
+      <div class="masthead__side masthead__side--right">
+        <div class="price-slip">本期监测<br><b>21</b> 个地区 · 7 个档位</div>
+        <div class="scribble">价格每天在变，<br>别按去年的价买。</div>
+      </div>
+    </div>
+    <div class="masthead__rule masthead__rule--thick"></div>
+    <p class="masthead__lede">同一个会员，换一个地区，可能便宜出一顿火锅。我们把官网、Apple、Google Play 的本币价格摊在同一张桌上，再按最新牌价折成人民币——从最便宜的地区开始读。附一张由 Artificial Analysis 数据支撑的 AI 天梯，谁最聪明、谁最划算，一眼看完。</p>
+  </header>
+
+  <div class="ticker" aria-label="汇率牌价滚动条">
+    <div class="ticker__label"><span class="pulse"></span> FX AUTO</div>
+    <div class="ticker__track"><div class="ticker__inner" id="fx-ticker"></div></div>
+    <div class="ticker__status"><span id="fx-status">同步中</span></div>
+  </div>
+
+  <section class="hero">
+    <div class="hero__copy">
+      <div class="kicker">HEADLINE · 今日头条</div>
+      <h2 class="hero__title">同样一个会员，<br><span class="hl">最贵与最便宜差了 <em id="hero-spread">—</em></span></h2>
+      <p class="hero__text">我们核对了 <b>7 个 AI 会员档位</b>、<b>21 个地区</b>、<b>3 条购买渠道</b>。榜单按每个地区「官网 / Apple / Google Play」里最便宜的一条计价，含税估算与最新牌价一起算，帮你找到当下真正的低价座位。</p>
+      <div class="hero__stats">
+        <div class="hero__stat"><b>21</b><span>地区</span></div>
+        <div class="hero__stat"><b>7</b><span>会员档位</span></div>
+        <div class="hero__stat"><b>3</b><span>购买渠道</span></div>
+        <div class="hero__stat"><b>60s</b><span>汇率检查</span></div>
+        <div class="hero__stat"><b>14</b><span>天梯模型</span></div>
+      </div>
+    </div>
+    <div class="hero__art" aria-hidden="true">
+      <span class="art-tape"></span>
+      <svg viewBox="0 0 560 400" role="img" aria-label="剪贴画：地球、价格标签、剪刀与硬币">
+        <defs>
+          <filter id="roughEdge" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="8" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <clipPath id="globeClip"><circle cx="278" cy="190" r="116"/></clipPath>
+          <pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1" fill="#1d1a16" opacity=".22"/>
+          </pattern>
+        </defs>
+
+        <!-- map scrap -->
+        <g transform="rotate(-2.4 280 200)" filter="url(#roughEdge)">
+          <rect x="30" y="36" width="500" height="328" fill="#e8ddc6" stroke="#1d1a16" stroke-width="1.3"/>
+          <rect x="30" y="36" width="500" height="328" fill="url(#halftone)" opacity=".35"/>
+          <path d="M30 320c80-30 130 8 210-24s150 20 290-12" fill="none" stroke="#b9ab91" stroke-width="1" stroke-dasharray="2 5"/>
+          <path d="M30 86c90 20 180-14 250 4s150 34 250 12" fill="none" stroke="#b9ab91" stroke-width="1" stroke-dasharray="1 6"/>
+          <text x="48" y="58" font-family="Courier New,monospace" font-size="9" letter-spacing="3" fill="#7a6b52">GLOBAL PRICE SURVEY · 2026</text>
+        </g>
+
+        <!-- orbit -->
+        <ellipse cx="278" cy="196" rx="182" ry="66" fill="none" stroke="#2f6f6a" stroke-width="1.4" stroke-dasharray="4 6" transform="rotate(-16 278 196)" opacity=".7"/>
+
+        <!-- globe -->
+        <g filter="url(#roughEdge)">
+          <circle cx="278" cy="190" r="118" fill="#d5e4da" stroke="#1d1a16" stroke-width="2.6"/>
+          <g clip-path="url(#globeClip)">
+            <path d="M190 118c22-28 64-38 92-22 21 12 15 35-4 48-22 15-52 8-69-3-17-11-29-10-19-23z" fill="#8bb2a0" stroke="#1d1a16" stroke-width="1.6"/>
+            <path d="M300 154c19-11 47-4 58 12 8 13 2 27-13 31-17 5-36-3-45-15-7-10-11-21 0-28z" fill="#a7c4a9" stroke="#1d1a16" stroke-width="1.5"/>
+            <path d="M212 208c15-9 38-4 47 9 8 12 1 24-13 30-15 6-31 0-38-10-7-9-9-21 4-29z" fill="#c9a36a" stroke="#1d1a16" stroke-width="1.5"/>
+            <path d="M330 224c12-7 29-2 36 8 6 9 0 20-11 25-12 5-26 1-31-8-5-8-5-18 6-25z" fill="#8bb2a0" stroke="#1d1a16" stroke-width="1.4"/>
+            <path d="M112 190h332M278 72v236M146 112c80 40 184 40 264 0M146 268c80-40 184-40 264 0" fill="none" stroke="#1d1a16" stroke-width=".9" opacity=".45"/>
+            <ellipse cx="278" cy="190" rx="62" ry="118" fill="none" stroke="#1d1a16" stroke-width=".9" opacity=".35"/>
+            <ellipse cx="278" cy="190" rx="104" ry="118" fill="none" stroke="#1d1a16" stroke-width=".7" opacity=".25"/>
+          </g>
+        </g>
+
+        <!-- flight path + plane -->
+        <path d="M88 104c40-34 88-18 118 10s46 38 70 34" fill="none" stroke="#c8442e" stroke-width="1.6" stroke-dasharray="3 5"/>
+        <g transform="translate(262 138) rotate(18)">
+          <path d="M0 8 30 0 22 13 27 22 19 20 15 27 12 18 0 8z" fill="#c8442e" stroke="#1d1a16" stroke-width="1"/>
+        </g>
+
+        <!-- price tags -->
+        <g transform="translate(72 72) rotate(-11)">
+          <path d="M28 0h58l26 22-26 22H28L0 22z" fill="#d97856" stroke="#1d1a16" stroke-width="1.6"/>
+          <circle cx="28" cy="22" r="3.4" fill="#f4ecdc" stroke="#1d1a16" stroke-width="1.3"/>
+          <text x="43" y="18" font-family="Courier New,monospace" font-size="13" fill="#fff7e8">¥3,000</text>
+          <text x="43" y="31" font-family="Courier New,monospace" font-size="7" letter-spacing="1.5" fill="#fff7e8">TOKYO</text>
+          <path d="M28 6 100 122" stroke="#7a6b52" stroke-width="1" stroke-dasharray="2 3"/>
+        </g>
+        <g transform="translate(394 54) rotate(8)">
+          <path d="M26 0h50l24 20-24 20H26L0 20z" fill="#e3b23c" stroke="#1d1a16" stroke-width="1.6"/>
+          <circle cx="26" cy="20" r="3.2" fill="#f4ecdc" stroke="#1d1a16" stroke-width="1.2"/>
+          <text x="38" y="17" font-family="Courier New,monospace" font-size="12" fill="#1d1a16">$20</text>
+          <text x="38" y="29" font-family="Courier New,monospace" font-size="7" letter-spacing="1.4" fill="#1d1a16">NEW YORK</text>
+          <path d="M26 40c-12 34-32 54-64 74" stroke="#7a6b52" stroke-width="1" stroke-dasharray="2 3" fill="none"/>
+        </g>
+        <g transform="translate(404 268) rotate(-6)">
+          <path d="M24 0h54l22 19-22 19H24L0 19z" fill="#2f6f6a" stroke="#1d1a16" stroke-width="1.6"/>
+          <circle cx="24" cy="19" r="3.2" fill="#f4ecdc" stroke="#1d1a16" stroke-width="1.2"/>
+          <text x="36" y="16" font-family="Courier New,monospace" font-size="12" fill="#f7f0df">€23</text>
+          <text x="36" y="28" font-family="Courier New,monospace" font-size="7" letter-spacing="1.4" fill="#f7f0df">BERLIN</text>
+          <path d="M24 0C10-28-22-54-54-80" stroke="#7a6b52" stroke-width="1" stroke-dasharray="2 3" fill="none"/>
+        </g>
+
+        <!-- coins -->
+        <g transform="translate(76 280)">
+          <ellipse cx="30" cy="28" rx="31" ry="12" fill="#b3851c" stroke="#1d1a16" stroke-width="1.3"/>
+          <ellipse cx="30" cy="23" rx="31" ry="12" fill="#e3b23c" stroke="#1d1a16" stroke-width="1.3"/>
+          <ellipse cx="30" cy="18" rx="31" ry="12" fill="#f0c75e" stroke="#1d1a16" stroke-width="1.3"/>
+          <text x="22" y="23" font-family="Courier New,monospace" font-size="10" fill="#1d1a16">CNY</text>
+          <ellipse cx="76" cy="40" rx="24" ry="9" fill="#b3851c" stroke="#1d1a16" stroke-width="1.2"/>
+          <ellipse cx="76" cy="36" rx="24" ry="9" fill="#e3b23c" stroke="#1d1a16" stroke-width="1.2"/>
+        </g>
+
+        <!-- scissors -->
+        <g transform="translate(346 320) rotate(-16)">
+          <path d="M2 4 58 42M2 44 58 8" stroke="#1d1a16" stroke-width="3.4" stroke-linecap="round"/>
+          <circle cx="2" cy="4" r="8" fill="none" stroke="#1d1a16" stroke-width="2.4"/>
+          <circle cx="2" cy="44" r="8" fill="none" stroke="#1d1a16" stroke-width="2.4"/>
+          <path d="M34 26 62 22" stroke="#c8442e" stroke-width="2" stroke-dasharray="3 3"/>
+          <text x="68" y="24" font-family="Courier New,monospace" font-size="7" fill="#c8442e">CUT THE PRICE</text>
+        </g>
+
+        <!-- stamp -->
+        <g transform="translate(120 322) rotate(-7)">
+          <rect x="0" y="0" width="112" height="34" fill="none" stroke="#c8442e" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="10" y="14" font-family="Courier New,monospace" font-size="8" letter-spacing="1" fill="#c8442e">21 REGIONS · 3 STORES</text>
+          <text x="10" y="27" font-family="Courier New,monospace" font-size="7" letter-spacing="1" fill="#c8442e">ONE PLAN, MANY PRICES</text>
+        </g>
+
+        <!-- tape corners -->
+        <rect x="18" y="26" width="70" height="19" fill="#d9b86a" opacity=".72" transform="rotate(-34 53 35)"/>
+        <rect x="464" y="330" width="74" height="19" fill="#b9d2c6" opacity=".8" transform="rotate(-12 501 339)"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="toolbox" id="toolbox">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>选一个会员</h2>
+      <span class="section-note">7 个档位 · 切换后榜单即时重排</span>
+    </div>
+    <div class="plan-tabs" id="plan-tabs" role="tablist" aria-label="会员档位"></div>
+    <div class="filters">
+      <div class="filter-group">
+        <span class="filter-label">付款渠道</span>
+        <div class="channel-toggles" id="channel-toggles" role="group" aria-label="付款渠道口径">
+          <button class="channel-chip is-on" data-mode="all" type="button" aria-pressed="true" title="三个渠道取最低价">
+            <span class="ch-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12 6 7l3 3 5-7"/><path d="M10 3h4v4"/></svg></span>全网最低
+          </button>
+          <button class="channel-chip" data-mode="official" type="button" aria-pressed="false" title="只看官网价格">
+            <span class="ch-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12"/></svg></span>官网
+          </button>
+          <button class="channel-chip" data-mode="apple" type="button" aria-pressed="false" title="只看 Apple App Store 价格">
+            <span class="ch-icon"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.4 8.5c0-1.7 1.4-2.5 1.5-2.6-.8-1.2-2-1.4-2.5-1.4-1.1-.1-2 .6-2.5.6-.5 0-1.3-.6-2.2-.6-1.1 0-2.2.7-2.8 1.7-1.2 2.1-.3 5.2.9 6.9.6.9 1.3 1.9 2.2 1.8.9 0 1.2-.6 2.3-.6s1.4.6 2.3.6c1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1-.1 0-2.1-.8-2.1-3zM9.8 3.2c.5-.6.8-1.4.7-2.2-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1.1z"/></svg></span>Apple
+          </button>
+          <button class="channel-chip" data-mode="google" type="button" aria-pressed="false" title="只看 Google Play 价格">
+            <span class="ch-icon"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.2 1.5 12.7 8l-9.5 6.5V1.5z"/></svg></span>Google Play
+          </button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="switch" title="官网价多为税前，Apple / Google 展示价多数地区含税">
+          <input type="checkbox" id="tax-toggle" checked>
+          <span class="switch__track"></span>
+          <span>含税估算</span>
+        </label>
+        <label class="search">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="m11 11 3.5 3.5"/></svg>
+          <input id="region-search" type="search" placeholder="找地区…" autocomplete="off">
+        </label>
+        <button class="btn" id="print-btn" type="button">打印这张小报</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="summary" id="summary" aria-label="比价概况"></section>
+
+  <div class="board-grid">
+    <section class="ranking" aria-label="地区价格排行榜">
+      <div class="section-head section-head--ranking">
+        <span class="section-num">02</span>
+        <h2>今日比价榜</h2>
+        <span class="live-stamp" id="rank-updated">牌价同步中</span>
+      </div>
+      <div class="ranking__head" aria-hidden="true">
+        <span>排名</span><span>地区</span><span>最低渠道</span><span>本币价</span><span>折合人民币</span>
+      </div>
+      <div class="ranking__list" id="ranking-list"></div>
+      <div class="ranking__foot">
+        <span id="ranking-foot">共 21 个地区 · 点任意一行展开三渠道小票</span>
+        <span class="legend"><i class="dot dot--verified"></i>核实 <i class="dot dot--base"></i>官网基价 <i class="dot dot--estimated"></i>估算</span>
+      </div>
+    </section>
+
+    <aside class="sidebar" aria-label="AI 天梯与汇率">
+      <section class="ladder">
+        <div class="ladder__head">
+          <div>
+            <span class="ladder__kicker">AUTHORITATIVE · 权威榜</span>
+            <h2>AI 天梯</h2>
+          </div>
+          <div class="ladder__live"><span class="pulse pulse--amber" id="ladder-pulse"></span><span id="ladder-status">快照</span></div>
+        </div>
+        <p class="ladder__source">Artificial Analysis Intelligence Index v5 · <a href="https://artificialanalysis.ai/leaderboards/models" target="_blank" rel="noopener">查看官方原榜 ↗</a></p>
+        <div class="ladder__tabs" id="ladder-tabs">
+          <button class="ladder__tab is-active" data-sort="score" type="button">智力</button>
+          <button class="ladder__tab" data-sort="value" type="button">性价比</button>
+          <button class="ladder__tab" data-sort="speed" type="button">速度</button>
+        </div>
+        <div class="ladder__list" id="ladder-list"></div>
+        <div class="ladder__foot">
+          <span id="ladder-updated">今日快照 2026-11-08</span>
+          <button id="ladder-sync" type="button">重新同步</button>
+        </div>
+        <p class="ladder__hint">同家族只留最高分版本；括号内是推理档位。</p>
+      </section>
+
+      <section class="fx-card">
+        <div class="fx-card__head"><h2>汇率牌价</h2><span>每 60s 检查 · 日更</span></div>
+        <div class="fx-grid" id="fx-grid"></div>
+        <div class="fx-card__foot"><span id="fx-updated">读取中…</span><button id="fx-refresh" type="button">重拉</button></div>
+      </section>
+
+      <section class="spread-card">
+        <div class="spread-card__head"><h2>三渠道均价</h2><span>CHANNEL AVG</span></div>
+        <div id="spread-rows"></div>
+        <p class="spread-card__note" id="spread-note"></p>
+      </section>
+
+      <section class="takeaway-card">
+        <div class="takeaway-card__head"><h2>三句话读完</h2><span>TAKEAWAYS</span></div>
+        <ol id="takeaway-list"></ol>
+      </section>
+
+      <section class="note-card">
+        <span class="note-card__tape" aria-hidden="true"></span>
+        <h2>编辑小注</h2>
+        <p>“低价区”不等于“能买区”。跨区订阅可能要当地 Apple ID、当地支付方式，甚至违反服务条款——<b>价比三家之前，先看能不能合规买到</b>。</p>
+        <p>另外，官网的美元价、商店的含税价、银行卡的货币转换费，是三笔不同的账。本页统一按标价折算，不包含发卡行 1%–3% 的货币转换费。</p>
+        <p class="note-card__sign">—— 汇率机器人</p>
+      </section>
+    </aside>
+  </div>
+
+  <section class="method">
+    <div class="method__head">
+      <span class="section-num">03</span>
+      <h2>这张报是怎么算出来的</h2>
+      <span>METHODOLOGY · 口径说明</span>
+    </div>
+    <div class="method__grid">
+      <div class="method__box">
+        <h3>汇率怎么折</h3>
+        <p>人民币价 = 本币标价 ÷ 美元兑本币汇率 × 美元兑人民币汇率。页面每 60 秒检查一次 ExchangeRate-API；该免费牌价源每日更新一次，不是逐秒行情。拉取失败时使用 2026-11-08 的内置牌价，并在状态灯上标注。</p>
+      </div>
+      <div class="method__box">
+        <h3>含税与不含税</h3>
+        <p>官网价很多是税前价，Apple / Google 的展示价在多数地区已经含税。打开「含税估算」后，官网价按地区 VAT 估算补齐；实际金额以结算页为准。美国、加拿大商店价可能另加销售税。</p>
+      </div>
+      <div class="method__box">
+        <h3>三个置信戳</h3>
+        <p><b>核</b>：渠道页面逐项核对；<b>官</b>：官网美元基准价；<b>估</b>：按商店同档定价或本币价推算。没有来源的数字不写成“核实价”，估算项会在小票里写明依据。</p>
+      </div>
+      <div class="method__box">
+        <h3>排行规则</h3>
+        <p>每个地区取所勾选渠道里的最低价，折算成人民币后由低到高排。并列时按地区名排序；榜首是「当前勾选口径下的最低价」，换渠道或关掉含税后可能换人。</p>
+      </div>
+      <div class="method__box">
+        <h3>天梯数据源</h3>
+        <p>AI 天梯来自 Artificial Analysis 的 Intelligence Index v5，同家族只保留最高分版本。官方站点没有公开 CORS 接口，页面会用公共代理尝试同步；同步失败时展示 2026-11-08 的快照，并明确标注。</p>
+      </div>
+      <div class="method__box">
+        <h3>别只看价格</h3>
+        <p>不同地区可能存在功能差异、支付失败、退款困难或封号风险。本页只做价格信息整理，不提供代购、跨区支付或 VPN 教程；买之前请读服务条款。</p>
+      </div>
+    </div>
+    <div class="sources" id="sources"></div>
+  </section>
+
+  <footer>
+    <span>THE AI PRICE GAZETTE · 本报由 <b>汇率机器人</b> 与剪贴画编辑部出品</span>
+    <span class="footer__note">价格为公开渠道快照，非购买要约 · 牌价源更新 <span id="footer-time">—</span></span>
+  </footer>
+</div>
+
+<script>
+window.__DATA__ = {"generatedAt":"2026-11-08T11:45:00+08:00","snapshotDate":"2026-11-08","fx":{"base":"USD","updated":"Sun, 08 Nov 2026 00:02:31 +0000","rates":{"USD":1,"CAD":1.409364,"GBP":0.747473,"EUR":0.895793,"JPY":158.318418,"KRW":1355.382119,"HKD":7.839588,"TWD":32.847015,"INR":94.114483,"SGD":1.281547,"MYR":4.0559,"THB":33.548613,"VND":25602.593225,"PHP":63.064627,"TRY":50.172034,"NGN":1347.744892,"EGP":53.902283,"BRL":5.502723,"MXN":18.652374,"ARS":1545.3974,"CNY":6.690826}},"regions":[{"code":"US","name":"美国","en":"United States","currency":"USD","vat":0.0,"group":"北美","colors":["#1f3a66","#c8442e","#f2efe6"]},{"code":"CA","name":"加拿大","en":"Canada","currency":"CAD","vat":0.13,"group":"北美","colors":["#c8442e","#f2efe6","#c8442e"]},{"code":"GB","name":"英国","en":"United Kingdom","currency":"GBP","vat":0.2,"group":"欧洲","colors":["#1f3a66","#f2efe6","#c8442e"]},{"code":"DE","name":"德国","en":"Germany","currency":"EUR","vat":0.19,"group":"欧洲","colors":["#1b1b1b","#c8442e","#e9b949"]},{"code":"FR","name":"法国","en":"France","currency":"EUR","vat":0.2,"group":"欧洲","colors":["#1f3a66","#f2efe6","#c8442e"]},{"code":"JP","name":"日本","en":"Japan","currency":"JPY","vat":0.1,"group":"东亚","colors":["#f2efe6","#c8442e","#f2efe6"]},{"code":"KR","name":"韩国","en":"South Korea","currency":"KRW","vat":0.1,"group":"东亚","colors":["#f2efe6","#1f3a66","#c8442e"]},{"code":"HK","name":"中国香港","en":"Hong Kong","currency":"HKD","vat":0.0,"group":"东亚","colors":["#c8442e","#f2efe6","#c8442e"]},{"code":"TW","name":"中国台湾","en":"Taiwan","currency":"TWD","vat":0.05,"group":"东亚","colors":["#1f3a66","#f2efe6","#c8442e"]},{"code":"IN","name":"印度","en":"India","currency":"INR","vat":0.18,"group":"南亚","colors":["#e78b3f","#f2efe6","#2f6f4a"]},{"code":"SG","name":"新加坡","en":"Singapore","currency":"SGD","vat":0.09,"group":"东南亚","colors":["#c8442e","#f2efe6","#c8442e"]},{"code":"MY","name":"马来西亚","en":"Malaysia","currency":"MYR","vat":0.08,"group":"东南亚","colors":["#1f3a66","#c8442e","#f2efe6"]},{"code":"TH","name":"泰国","en":"Thailand","currency":"THB","vat":0.07,"group":"东南亚","colors":["#c8442e","#f2efe6","#1f3a66"]},{"code":"VN","name":"越南","en":"Vietnam","currency":"VND","vat":0.1,"group":"东南亚","colors":["#c8442e","#e9b949"]},{"code":"PH","name":"菲律宾","en":"Philippines","currency":"PHP","vat":0.12,"group":"东南亚","colors":["#1f3a66","#c8442e","#f2efe6"]},{"code":"TR","name":"土耳其","en":"Türkiye","currency":"TRY","vat":0.2,"group":"低价区","colors":["#c8442e","#f2efe6","#c8442e"]},{"code":"NG","name":"尼日利亚","en":"Nigeria","currency":"NGN","vat":0.075,"group":"低价区","colors":["#2f6f4a","#f2efe6","#2f6f4a"]},{"code":"EG","name":"埃及","en":"Egypt","currency":"EGP","vat":0.14,"group":"低价区","colors":["#c8442e","#f2efe6","#1b1b1b"]},{"code":"BR","name":"巴西","en":"Brazil","currency":"BRL","vat":0.15,"group":"拉美","colors":["#2f6f4a","#e9b949","#2f6f4a"]},{"code":"MX","name":"墨西哥","en":"Mexico","currency":"MXN","vat":0.16,"group":"拉美","colors":["#2f6f4a","#f2efe6","#c8442e"]},{"code":"AR","name":"阿根廷","en":"Argentina","currency":"ARS","vat":0.21,"group":"拉美","colors":["#7fb3c8","#f2efe6","#7fb3c8"]}],"plans":[{"id":"gpt-plus","brand":"OpenAI","name":"ChatGPT Plus","tag":"最主流的个人档","usd":20,"mark":"GPT","color":"#0f8a72","deep":"#0a5c4c","bg":"#d9eee6"},{"id":"gpt-pro","brand":"OpenAI","name":"ChatGPT Pro","tag":"重度用户的高阶档","usd":200,"mark":"GPT","color":"#0a5c4c","deep":"#063b31","bg":"#cfe6dd"},{"id":"claude-pro","brand":"Anthropic","name":"Claude Pro","tag":"写作与长文主力","usd":20,"mark":"C","color":"#c15f3c","deep":"#8a3f27","bg":"#f4dfd3"},{"id":"claude-max5","brand":"Anthropic","name":"Claude Max 5×","tag":"5 倍用量","usd":100,"mark":"C","color":"#a84e30","deep":"#74331f","bg":"#efd2c3"},{"id":"claude-max20","brand":"Anthropic","name":"Claude Max 20×","tag":"20 倍用量","usd":200,"mark":"C","color":"#8f3f25","deep":"#622a19","bg":"#e9c6b4"},{"id":"supergrok","brand":"xAI","name":"SuperGrok","tag":"xAI 独立订阅","usd":30,"mark":"G","color":"#1c1c1c","deep":"#000000","bg":"#f0dfae"},{"id":"x-premium","brand":"X","name":"X Premium+","tag":"含 Grok 的 X 会员","usd":50,"mark":"X","color":"#2b2b2b","deep":"#000000","bg":"#ded6c4"}],"prices":{"gpt-plus":{"US":{"official":{"amount":20,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":19.99,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/us/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":19.99,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"CA":{"official":{"amount":27,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":24.99,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/ca/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":24.99,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"GB":{"official":{"amount":20,"currency":"GBP","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":19.99,"currency":"GBP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/gb/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":19.99,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"DE":{"official":{"amount":23,"currency":"EUR","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":22.99,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/de/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":22.99,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"FR":{"official":{"amount":23,"currency":"EUR","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":22.99,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/fr/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":22.99,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"JP":{"official":{"amount":3000,"currency":"JPY","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":3000,"currency":"JPY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/jp/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":3000,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"KR":{"official":{"amount":29000,"currency":"KRW","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":29000,"currency":"KRW","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/kr/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":29000,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"HK":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":164.68,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"参考台湾区同档价推算"},"google":{"amount":164.68,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":690,"currency":"TWD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tw/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":690,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"IN":{"official":{"amount":1999,"currency":"INR","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":1999,"currency":"INR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/in/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":1999,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"SG":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":29.98,"currency":"SGD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/sg/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":29.98,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"MY":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":99.9,"currency":"MYR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/my/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":99.9,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"TH":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":699,"currency":"THB","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/th/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":699,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"VN":{"official":{"amount":520000,"currency":"VND","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":499000,"currency":"VND","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/vn/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":499000,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"PH":{"official":{"amount":1200,"currency":"PHP","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":999,"currency":"PHP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ph/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":999,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"TR":{"official":{"amount":1000,"currency":"TRY","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":999.99,"currency":"TRY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tr/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":999.99,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"NG":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":31500,"currency":"NGN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ng/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":31500,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"EG":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":999.99,"currency":"EGP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/eg/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":999.99,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"BR":{"official":{"amount":110,"currency":"BRL","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":99.9,"currency":"BRL","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/br/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":99.9,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"MX":{"official":{"amount":400,"currency":"MXN","confidence":"verified","taxIncluded":false,"basis":"本地化官网定价"},"apple":{"amount":399,"currency":"MXN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/mx/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":399,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"AR":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":19.99,"currency":"USD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ar/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":19.99,"currency":"USD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}}},"gpt-pro":{"US":{"official":{"amount":200,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":200,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/us/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":200,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"CA":{"official":{"amount":270,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":249,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/ca/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":249,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"GB":{"official":{"amount":200,"currency":"GBP","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":200,"currency":"GBP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/gb/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":200,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"DE":{"official":{"amount":230,"currency":"EUR","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":229,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/de/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":229,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"FR":{"official":{"amount":230,"currency":"EUR","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":229,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/fr/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":229,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"JP":{"official":{"amount":30000,"currency":"JPY","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":30000,"currency":"JPY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/jp/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":30000,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"KR":{"official":{"amount":290000,"currency":"KRW","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":299000,"currency":"KRW","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/kr/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":299000,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"HK":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1668.3,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"参考台湾区同档价推算"},"google":{"amount":1668.3,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":6990,"currency":"TWD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tw/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":6990,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"IN":{"official":{"amount":19990,"currency":"INR","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":19900,"currency":"INR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/in/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":19900,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"SG":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":299.98,"currency":"SGD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/sg/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":299.98,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"MY":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":999.9,"currency":"MYR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/my/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":999.9,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"TH":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":6990,"currency":"THB","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/th/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":6990,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"VN":{"official":{"amount":5200000,"currency":"VND","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":4999000,"currency":"VND","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/vn/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":4999000,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"PH":{"official":{"amount":12000,"currency":"PHP","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":9990,"currency":"PHP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ph/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":9990,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"TR":{"official":{"amount":10000,"currency":"TRY","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":9999.99,"currency":"TRY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tr/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":9999.99,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"NG":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":299900,"currency":"NGN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ng/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":299900,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"EG":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":9999.99,"currency":"EGP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/eg/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":9999.99,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"BR":{"official":{"amount":1100,"currency":"BRL","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":999.9,"currency":"BRL","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/br/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":999.9,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"MX":{"official":{"amount":4000,"currency":"MXN","confidence":"estimated","taxIncluded":false,"basis":"按 Plus 本币价 ×10 推算"},"apple":{"amount":3999,"currency":"MXN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/mx/app/chatgpt/id6448311069?uo=4","checked":"2026-11-08"},"google":{"amount":3999,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-08"}},"AR":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":200,"currency":"USD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ar/app/chatgpt/id6448311069?uo=4","checked":"2026-11-06"},"google":{"amount":200,"currency":"USD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}}},"claude-pro":{"US":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":20,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":20,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"CA":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":28,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/ca/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":28,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"GB":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":20,"currency":"GBP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/gb/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":20,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"DE":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":22,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/de/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":22,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"FR":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":22,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/fr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":22,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"JP":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":3000,"currency":"JPY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/jp/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":3000,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"KR":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":33000,"currency":"KRW","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/kr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":33000,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"HK":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":164.68,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"参考台湾区同档价推算"},"google":{"amount":164.68,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":690,"currency":"TWD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tw/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-06"},"google":{"amount":690,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"IN":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1999,"currency":"INR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/in/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":1999,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"SG":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":29.98,"currency":"SGD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/sg/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":29.98,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"MY":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":99.9,"currency":"MYR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/my/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":99.9,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"TH":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":699,"currency":"THB","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/th/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":699,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"VN":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":599000,"currency":"VND","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/vn/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":599000,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"PH":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1290,"currency":"PHP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ph/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":1290,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"TR":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":999.99,"currency":"TRY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":999.99,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"NG":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":29900,"currency":"NGN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ng/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-06"},"google":{"amount":29900,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"EG":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":999.99,"currency":"EGP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/eg/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-06"},"google":{"amount":999.99,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"BR":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":129.9,"currency":"BRL","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/br/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":129.9,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"MX":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":399,"currency":"MXN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/mx/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-07"},"google":{"amount":399,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"AR":{"official":{"amount":20,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":20,"currency":"USD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ar/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-11-06"},"google":{"amount":20,"currency":"USD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}}},"claude-max5":{"US":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":124.99,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":124.99,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"CA":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":179.99,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/ca/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":179.99,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"GB":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":119.99,"currency":"GBP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/gb/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":119.99,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"DE":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":149.99,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/de/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":149.99,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"FR":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":149.99,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/fr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":149.99,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"JP":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":20000,"currency":"JPY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/jp/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":20000,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"KR":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":199000,"currency":"KRW","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/kr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":199000,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"HK":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":952.29,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"参考台湾区同档价推算"},"google":{"amount":952.29,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":3990,"currency":"TWD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tw/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":3990,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}},"IN":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":12900,"currency":"INR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/in/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":12900,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"SG":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":179.98,"currency":"SGD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/sg/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":179.98,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"MY":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":599.9,"currency":"MYR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/my/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":599.9,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"TH":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":4990,"currency":"THB","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/th/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":4990,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"VN":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":3999000,"currency":"VND","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/vn/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":3999000,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"PH":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":7990,"currency":"PHP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ph/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":7990,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"TR":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":6999.99,"currency":"TRY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":6999.99,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"NG":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":199900,"currency":"NGN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ng/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":199900,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}},"EG":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":6999.99,"currency":"EGP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/eg/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":6999.99,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}},"BR":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":799.9,"currency":"BRL","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/br/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":799.9,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"MX":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":2499,"currency":"MXN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/mx/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":2499,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"AR":{"official":{"amount":100,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":124.99,"currency":"USD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ar/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":124.99,"currency":"USD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}}},"claude-max20":{"US":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":249.99,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":249.99,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"CA":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":349.99,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/ca/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":349.99,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"GB":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":249.99,"currency":"GBP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/gb/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":249.99,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"DE":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":299.99,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/de/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":299.99,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"FR":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":299.99,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/fr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":299.99,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"JP":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":40000,"currency":"JPY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/jp/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":40000,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"KR":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":449000,"currency":"KRW","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/kr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":449000,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"HK":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1906.97,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"参考台湾区同档价推算"},"google":{"amount":1906.97,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":7990,"currency":"TWD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tw/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":7990,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}},"IN":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":24900,"currency":"INR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/in/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":24900,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"SG":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":349.98,"currency":"SGD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/sg/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":349.98,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"MY":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1199.9,"currency":"MYR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/my/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":1199.9,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"TH":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":9990,"currency":"THB","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/th/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":9990,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"VN":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":7999000,"currency":"VND","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/vn/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":7999000,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"PH":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":14990,"currency":"PHP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ph/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":14990,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"TR":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":12999.99,"currency":"TRY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tr/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":12999.99,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"NG":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":399900,"currency":"NGN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ng/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":399900,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}},"EG":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":12999.99,"currency":"EGP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/eg/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":12999.99,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}},"BR":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1499.9,"currency":"BRL","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/br/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":1499.9,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"MX":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":4999,"currency":"MXN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/mx/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-30"},"google":{"amount":4999,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-30"}},"AR":{"official":{"amount":200,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":249.99,"currency":"USD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ar/app/claude-by-anthropic/id6473753684?uo=4","checked":"2026-10-29"},"google":{"amount":249.99,"currency":"USD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-29"}}},"supergrok":{"US":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":37.5,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"按商店同档溢价推算"},"google":{"amount":37.5,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价"}},"CA":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":52.85,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"按商店同档溢价推算"},"google":{"amount":52.85,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价"}},"GB":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":28.03,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":28.03,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"DE":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":33.59,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":33.59,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"FR":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":33.59,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":33.59,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"JP":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":5900,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":5900,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"KR":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":50800,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":50800,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"HK":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":293.98,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":293.98,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1231.76,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":1231.76,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"IN":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":3529.29,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":3529.29,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"SG":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":48.06,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":48.06,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"MY":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":152.1,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":152.1,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TH":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1258.07,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":1258.07,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"VN":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":960100,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":960100,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"PH":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":2364.92,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":2364.92,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TR":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1881.45,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":1881.45,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"NG":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":50540.43,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":50540.43,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"EG":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":2021.34,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":2021.34,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"BR":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":206.35,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":206.35,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"MX":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":699.46,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":699.46,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"AR":{"official":{"amount":30,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":57952.4,"currency":"ARS","confidence":"estimated","taxIncluded":true,"basis":"按商店同档溢价推算"},"google":{"amount":57952.4,"currency":"ARS","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}}},"x-premium":{"US":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":50,"currency":"USD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/us/app/id333903271","checked":"2026-11-07"},"google":{"amount":50,"currency":"USD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"CA":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":70,"currency":"CAD","confidence":"verified","taxIncluded":false,"basis":"App Store 标价","url":"https://apps.apple.com/ca/app/id333903271","checked":"2026-11-07"},"google":{"amount":70,"currency":"CAD","confidence":"estimated","taxIncluded":false,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"GB":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":47,"currency":"GBP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/gb/app/id333903271","checked":"2026-11-07"},"google":{"amount":47,"currency":"GBP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"DE":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":57,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/de/app/id333903271","checked":"2026-11-06"},"google":{"amount":57,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-06"}},"FR":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":57,"currency":"EUR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/fr/app/id333903271","checked":"2026-11-07"},"google":{"amount":57,"currency":"EUR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"JP":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":8000,"currency":"JPY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/jp/app/id333903271","checked":"2026-11-07"},"google":{"amount":8000,"currency":"JPY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"KR":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":77000,"currency":"KRW","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/kr/app/id333903271","checked":"2026-11-07"},"google":{"amount":77000,"currency":"KRW","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"HK":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":355.62,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"参考台湾区同档价推算"},"google":{"amount":355.62,"currency":"HKD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价"}},"TW":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1490,"currency":"TWD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tw/app/id333903271","checked":"2026-11-03"},"google":{"amount":1490,"currency":"TWD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-03"}},"IN":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":4999,"currency":"INR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/in/app/id333903271","checked":"2026-11-07"},"google":{"amount":4999,"currency":"INR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"SG":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":69.98,"currency":"SGD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/sg/app/id333903271","checked":"2026-11-07"},"google":{"amount":69.98,"currency":"SGD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"MY":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":229.9,"currency":"MYR","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/my/app/id333903271","checked":"2026-11-07"},"google":{"amount":229.9,"currency":"MYR","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"TH":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1390,"currency":"THB","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/th/app/id333903271","checked":"2026-11-07"},"google":{"amount":1390,"currency":"THB","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"VN":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":1250000,"currency":"VND","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/vn/app/id333903271","checked":"2026-11-07"},"google":{"amount":1250000,"currency":"VND","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"PH":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":2890,"currency":"PHP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ph/app/id333903271","checked":"2026-11-07"},"google":{"amount":2890,"currency":"PHP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"TR":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":2149.99,"currency":"TRY","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/tr/app/id333903271","checked":"2026-11-07"},"google":{"amount":2149.99,"currency":"TRY","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"NG":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":79900,"currency":"NGN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ng/app/id333903271","checked":"2026-11-03"},"google":{"amount":79900,"currency":"NGN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-03"}},"EG":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":2499.99,"currency":"EGP","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/eg/app/id333903271","checked":"2026-10-27"},"google":{"amount":2499.99,"currency":"EGP","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-10-27"}},"BR":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":199,"currency":"BRL","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/br/app/id333903271","checked":"2026-11-07"},"google":{"amount":199,"currency":"BRL","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"MX":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":999,"currency":"MXN","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/mx/app/id333903271","checked":"2026-11-07"},"google":{"amount":999,"currency":"MXN","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-07"}},"AR":{"official":{"amount":50,"currency":"USD","confidence":"base","taxIncluded":false,"basis":"官网美元标价"},"apple":{"amount":50,"currency":"USD","confidence":"verified","taxIncluded":true,"basis":"App Store 标价","url":"https://apps.apple.com/ar/app/id333903271","checked":"2026-11-03"},"google":{"amount":50,"currency":"USD","confidence":"estimated","taxIncluded":true,"basis":"Google Play 同档参考价","checked":"2026-11-03"}}}},"ladder":{"source":"Artificial Analysis","url":"https://artificialanalysis.ai/leaderboards/models","index":"Artificial Analysis Intelligence Index v5","snapshot":"2026-11-08","models":[{"rank":1,"name":"Gemini 4 Carbon (high)","family":"Gemini 4 Carbon","creator":"Google","score":60.0,"cost":7.76,"time":31.1,"latency":66.88,"context":"1M"},{"rank":2,"name":"Claude Opus 5.5 (max)","family":"Claude Opus 5.5","creator":"Anthropic","score":59.0,"cost":10.04,"time":25.0,"latency":369.34,"context":"1M"},{"rank":3,"name":"GPT-6 Astra (max)","family":"GPT-6 Astra","creator":"OpenAI","score":57.0,"cost":6.24,"time":21.0,"latency":237.99,"context":"1M"},{"rank":4,"name":"GPT-6.1 Sol (max)","family":"GPT-6.1 Sol","creator":"OpenAI","score":55.0,"cost":1.27,"time":21.7,"latency":203.17,"context":"1M"},{"rank":5,"name":"Claude Sonnet 5.5 (max)","family":"Claude Sonnet 5.5","creator":"Anthropic","score":55.0,"cost":10.02,"time":31.5,"latency":283.09,"context":"1M"},{"rank":6,"name":"GPT-6.1 Terra (max)","family":"GPT-6.1 Terra","creator":"OpenAI","score":51.0,"cost":0.96,"time":13.8,"latency":169.42,"context":"1M"},{"rank":7,"name":"Gemini 4 Argon (high)","family":"Gemini 4 Argon","creator":"Google","score":50.0,"cost":9.95,"time":27.7,"latency":38.93,"context":"1M"},{"rank":8,"name":"Claude Fable 5.1 (xhigh)","family":"Claude Fable 5.1","creator":"Anthropic","score":50.0,"cost":10.85,"time":18.3,"latency":68.75,"context":"1M"},{"rank":9,"name":"Kimi K3.1 Pro","family":"Kimi K3.1 Pro","creator":"Kimi","score":46.0,"cost":3.68,"time":36.2,"latency":174.78,"context":"1M"},{"rank":10,"name":"Muse Wonder (max)","family":"Muse Wonder","creator":"Meta","score":44.0,"cost":6.95,"time":12.3,"latency":23.52,"context":"1M"},{"rank":11,"name":"Claude Haiku 5.5 (max)","family":"Claude Haiku 5.5","creator":"Anthropic","score":36.0,"cost":0.41,"time":16.1,"latency":176.6,"context":"1M"},{"rank":12,"name":"Tencent Hy4","family":"Tencent Hy4","creator":"Tencent","score":35.0,"cost":1.03,"time":13.9,"latency":103.27,"context":"1M"},{"rank":13,"name":"Grok 4.7 (xhigh)","family":"Grok 4.7","creator":"SpaceXAI","score":35.0,"cost":7.77,"time":23.9,"latency":54.74,"context":"500k"},{"rank":14,"name":"Qwen3.8 Max (0902)","family":"Qwen3.8 Max","creator":"Alibaba","score":34.0,"cost":10.02,"time":60.1,"latency":140.21,"context":"984k"}]},"sources":[{"label":"Artificial Analysis · LLM Leaderboard","url":"https://artificialanalysis.ai/leaderboards/models","note":"AI 天梯数据源：智能指数、成本与速度均取自官方榜单页面"},{"label":"GeoSub · Claude / ChatGPT / X 地区价","url":"https://geosub.org/en/ai-pricing/claude/pro","note":"App Store 本币标价核对，采集日期 2026-11-06 至 11-08"},{"label":"ITSCHEAPER · ChatGPT Plus by country","url":"https://itscheaper.in/chatgpt-plus/","note":"ChatGPT Plus 本地化定价参考，核对日期 2026-11-01"},{"label":"OpenAI · ChatGPT Pricing","url":"https://openai.com/chatgpt/pricing/","note":"官网美元基准价"},{"label":"Anthropic · Pricing","url":"https://www.anthropic.com/pricing","note":"Claude Pro / Max 官网基准价"},{"label":"xAI · Grok","url":"https://x.ai/grok","note":"SuperGrok / X Premium+ 官网基准价"},{"label":"ExchangeRate-API · 汇率牌价","url":"https://open.er-api.com/","note":"页面每 60 秒检查一次（免费源每日更新），失败时使用内置牌价"}],"stats":{"regions":21,"plans":7,"channels":3}};
+
+</script>
+<script>
+(function () {
+  "use strict";
+
+  const D = window.__DATA__;
+  const CHANNELS = ["official", "apple", "google"];
+  const CH_META = {
+    official: {
+      label: "官网", short: "官网", pref: 0,
+      icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12"/></svg>'
+    },
+    apple: {
+      label: "Apple", short: "Apple", pref: 1,
+      icon: '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.4 8.5c0-1.7 1.4-2.5 1.5-2.6-.8-1.2-2-1.4-2.5-1.4-1.1-.1-2 .6-2.5.6-.5 0-1.3-.6-2.2-.6-1.1 0-2.2.7-2.8 1.7-1.2 2.1-.3 5.2.9 6.9.6.9 1.3 1.9 2.2 1.8.9 0 1.2-.6 2.3-.6s1.4.6 2.3.6c1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2.1-.1 0-2.1-.8-2.1-3zM9.8 3.2c.5-.6.8-1.4.7-2.2-.7 0-1.6.5-2.1 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.6-.4 2.2-1.1z"/></svg>'
+    },
+    google: {
+      label: "Google Play", short: "Google", pref: 2,
+      icon: '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.2 1.5 12.7 8l-9.5 6.5V1.5z"/></svg>'
+    }
+  };
+  const BRAND_URL = {
+    OpenAI: "https://openai.com/chatgpt/pricing/",
+    Anthropic: "https://www.anthropic.com/pricing",
+    xAI: "https://x.ai/grok",
+    X: "https://x.com/premium"
+  };
+  const CONF = {
+    verified: { stamp: "核", label: "渠道核实", cls: "verified" },
+    base: { stamp: "官", label: "官网基准价", cls: "base" },
+    estimated: { stamp: "估", label: "推算价", cls: "estimated" }
+  };
+  const CURRENCY = {
+    USD: ["US$", 2], CAD: ["CA$", 2], GBP: ["£", 2], EUR: ["€", 2], JPY: ["¥", 0],
+    KRW: ["₩", 0], HKD: ["HK$", 2], TWD: ["NT$", 0], INR: ["₹", 0], SGD: ["S$", 2],
+    MYR: ["RM", 2], THB: ["฿", 0], VND: ["₫", 0], PHP: ["₱", 0], TRY: ["₺", 0],
+    NGN: ["₦", 0], EGP: ["E£", 0], BRL: ["R$", 2], MXN: ["MX$", 0], ARS: ["AR$", 0],
+    CNY: ["¥", 0]
+  };
+
+  const state = {
+    plan: "gpt-plus",
+    channelMode: "all",
+    taxOn: true,
+    query: "",
+    openRegion: null,
+    ladderSort: "score"
+  };
+
+  let fx = {
+    rates: Object.assign({}, D.fx.rates),
+    updated: new Date(D.fx.updated),
+    live: false,
+    prev: null,
+    nextAt: Date.now() + 60000,
+    loading: false
+  };
+
+  /* ---------------- helpers ---------------- */
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const pad2 = n => String(n).padStart(2, "0");
+  const fmtTime = d => `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  const fmtRate = v => {
+    if (!isFinite(v)) return "—";
+    if (v >= 100) return v.toFixed(3);
+    if (v >= 1) return v.toFixed(4);
+    return v.toFixed(5);
+  };
+  const fmtCNY = (v, cents) => {
+    if (!isFinite(v)) return "—";
+    const n = cents ? Math.round(v * 100) / 100 : Math.round(v);
+    return "¥" + n.toLocaleString("zh-CN", {
+      minimumFractionDigits: cents ? 2 : 0,
+      maximumFractionDigits: cents ? 2 : 0
+    });
+  };
+  const fmtLocal = (amount, cur) => {
+    const meta = CURRENCY[cur] || ["", 2];
+    const dp = meta[1];
+    return meta[0] + Number(amount).toLocaleString("en-US", {
+      minimumFractionDigits: dp,
+      maximumFractionDigits: dp
+    });
+  };
+  const fmtCompact = (amount, cur) => {
+    const meta = CURRENCY[cur] || ["", 2];
+    return meta[0] + Number(amount).toLocaleString("en-US", {
+      minimumFractionDigits: 0, maximumFractionDigits: 2
+    });
+  };
+  const toCNY = (amount, cur) => {
+    const r = fx.rates[cur];
+    const cny = fx.rates.CNY;
+    if (!r || !cny) return NaN;
+    return (Number(amount) / r) * cny;
+  };
+  const channelIcon = (ch, className) =>
+    `<span class="${className || "ch-icon"}">${CH_META[ch].icon}</span>`;
+  const confMark = (p) => {
+    const c = CONF[p.confidence] || CONF.estimated;
+    return `<span class="conf conf--${c.cls}" title="${c.label}">${c.stamp}</span>`;
+  };
+  const planById = id => D.plans.find(p => p.id === id);
+  const regionByCode = c => D.regions.find(r => r.code === c);
+
+  function channelPrice(planId, region, ch) {
+    const p = D.prices[planId] && D.prices[planId][region.code]
+      ? D.prices[planId][region.code][ch] : null;
+    if (!p) return null;
+    const baseCNY = toCNY(p.amount, p.currency);
+    if (!isFinite(baseCNY)) return null;
+    const taxed = (!p.taxIncluded && state.taxOn) ? baseCNY * (1 + (region.vat || 0)) : baseCNY;
+    return { ch, p, region, baseCNY, cny: taxed, taxApplied: !p.taxIncluded && state.taxOn };
+  }
+
+  function activeChannels() {
+    return state.channelMode === "all" ? CHANNELS : [state.channelMode];
+  }
+
+  function modeLabel() {
+    return state.channelMode === "all" ? "全网最低" : CH_META[state.channelMode].label;
+  }
+
+  function regionRows(planId) {
+    const rows = [];
+    const channels = activeChannels();
+    D.regions.forEach(region => {
+      const entries = CHANNELS.map(ch => channelPrice(planId, region, ch)).filter(Boolean);
+      const counted = entries.filter(e => channels.includes(e.ch));
+      if (!counted.length) return;
+      counted.sort((a, b) => (a.cny - b.cny) || (CH_META[a.ch].pref - CH_META[b.ch].pref));
+      const best = counted[0];
+      entries.sort((a, b) => (a.cny - b.cny) || (CH_META[a.ch].pref - CH_META[b.ch].pref));
+      rows.push({ region, entries, counted, best, cny: best.cny });
+    });
+    rows.sort((a, b) => (a.cny - b.cny) || a.region.name.localeCompare(b.region.name, "zh-CN"));
+    return rows;
+  }
+
+  function visibleRows() {
+    let rows = regionRows(state.plan);
+    const q = state.query.trim().toLowerCase();
+    if (q) {
+      rows = rows.filter(r =>
+        r.region.name.toLowerCase().includes(q) ||
+        r.region.en.toLowerCase().includes(q) ||
+        r.region.code.toLowerCase().includes(q) ||
+        r.region.group.includes(q)
+      );
+    }
+    return rows;
+  }
+
+  function cheapestForPlan(planId) {
+    const rows = regionRows(planId);
+    return rows.length ? rows[0] : null;
+  }
+
+  /* ---------------- render: hero + masthead ---------------- */
+  function renderHero() {
+    const rows = regionRows(state.plan);
+    if (!rows.length) return;
+    const low = rows[0].cny;
+    const high = rows[rows.length - 1].cny;
+    const spread = high - low;
+    $("#hero-spread").textContent = fmtCNY(spread);
+    $("#mast-usd").textContent = fmtRate(fx.rates.CNY);
+    $("#fx-time-short").textContent = fmtTime(fx.updated);
+    $("#footer-time").textContent = `${D.snapshotDate} ${fmtTime(fx.updated)}`;
+    $("#rank-updated").textContent = `价格 ${D.snapshotDate.slice(5)} · 牌价 ${fmtTime(fx.updated)}`;
+  }
+
+  /* ---------------- render: plan tabs ---------------- */
+  function renderTabs() {
+    const wrap = $("#plan-tabs");
+    wrap.innerHTML = D.plans.map(p => {
+      const best = cheapestForPlan(p.id);
+      const active = p.id === state.plan;
+      return `<button type="button" role="tab" aria-selected="${active}" class="plan-tab${active ? " is-active" : ""}"
+        data-plan="${p.id}"
+        style="--brand:${p.color};--brand-deep:${p.deep};--brand-bg:${p.bg}">
+        <span class="plan-tab__mark">${p.mark}</span>
+        <span class="plan-tab__body"><b>${p.name}</b><small>${p.brand} · 低至 ${best ? fmtCNY(best.cny) : "—"}</small></span>
+      </button>`;
+    }).join("");
+    $$(".plan-tab", wrap).forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (state.plan === btn.dataset.plan) return;
+        state.plan = btn.dataset.plan;
+        state.openRegion = null;
+        renderAll();
+      });
+    });
+  }
+
+  /* ---------------- render: summary ---------------- */
+  function renderSummary() {
+    const wrap = $("#summary");
+    const rows = visibleRows();
+    if (!rows.length) {
+      wrap.innerHTML = `<div class="ticket ticket--cream"><div class="ticket__label">没有匹配的地区</div><div class="ticket__value">—</div></div>`;
+      return;
+    }
+    const low = rows[0];
+    const high = rows[rows.length - 1];
+    const median = rows[Math.floor((rows.length - 1) / 2)];
+    const us = regionRows(state.plan).find(r => r.region.code === "US");
+    const usDelta = us ? (low.cny - us.cny) / us.cny : null;
+    const usText = us
+      ? (Math.abs(usDelta) < 0.005 ? "与美区同价" : (usDelta < 0 ? `比美区便宜 ${Math.abs(usDelta * 100).toFixed(0)}%` : `比美区贵 ${(usDelta * 100).toFixed(0)}%`))
+      : "美区未在榜";
+    const vsValue = us
+      ? (Math.abs(usDelta) < 0.005 ? "±0%" : `${usDelta < 0 ? "−" : "+"}${Math.abs(usDelta * 100).toFixed(0)}%`)
+      : "—";
+
+    wrap.innerHTML = `
+      <div class="ticket ticket--teal">
+        <div class="ticket__label"><i></i>本次最低 / LOWEST</div>
+        <div class="ticket__value">${fmtCNY(low.cny)}<small>${low.region.code}</small></div>
+        <div class="ticket__sub">${low.region.name} · ${CH_META[low.best.ch].label} · ${fmtLocal(low.best.p.amount, low.best.p.currency)}</div>
+      </div>
+      <div class="ticket ticket--coral">
+        <div class="ticket__label"><i></i>最贵座位 / HIGHEST</div>
+        <div class="ticket__value">${fmtCNY(high.cny)}<small>${high.region.code}</small></div>
+        <div class="ticket__sub">${high.region.name} · ${CH_META[high.best.ch].label} · 中位 ${fmtCNY(median.cny)}</div>
+      </div>
+      <div class="ticket ticket--mustard">
+        <div class="ticket__label"><i></i>价差 / SPREAD</div>
+        <div class="ticket__value">${fmtCNY(high.cny - low.cny)}<small>${(high.cny / low.cny).toFixed(2)}×</small></div>
+        <div class="ticket__sub">最贵是最便宜的 ${(high.cny / low.cny).toFixed(2)} 倍 · 共 ${rows.length} 个地区</div>
+      </div>
+      <div class="ticket ticket--cream">
+        <div class="ticket__label"><i></i>对比美区 / VS US</div>
+        <div class="ticket__value">${vsValue}<small>${us ? fmtCNY(us.cny) : ""}</small></div>
+        <div class="ticket__sub">${usText}</div>
+      </div>`;
+  }
+
+  /* ---------------- render: ranking ---------------- */
+  function receiptItem(row, e) {
+    const c = CONF[e.p.confidence] || CONF.estimated;
+    const counted = state.channelMode === "all" || e.ch === state.channelMode;
+    const isBest = counted && e.ch === row.best.ch;
+    const taxNote = e.p.taxIncluded
+      ? "含税展示价"
+      : (state.taxOn && (row.region.vat || 0) > 0 ? `税前 + ${Math.round((row.region.vat || 0) * 100)}% VAT 估算` : "税前标价");
+    let localEquiv = "";
+    if (e.p.currency !== row.region.currency && fx.rates[e.p.currency] && fx.rates[row.region.currency]) {
+      const localAmt = e.p.amount / fx.rates[e.p.currency] * fx.rates[row.region.currency];
+      if (isFinite(localAmt)) localEquiv = ` · ≈ ${fmtLocal(localAmt, row.region.currency)}`;
+    }
+    let link = "";
+    if (e.ch === "official") {
+      link = `<a href="${BRAND_URL[planById(state.plan).brand] || "#"}" target="_blank" rel="noopener">官网价 ↗</a>`;
+    } else if (e.ch === "apple" && e.p.url) {
+      link = `<a href="${e.p.url}" target="_blank" rel="noopener">App Store ↗</a>`;
+    } else if (e.ch === "google") {
+      link = `<span title="Google Play 与 App Store 同档参考">同档参考</span>`;
+    } else {
+      link = `<span>${e.p.basis || ""}</span>`;
+    }
+    return `<div class="receipt__item${isBest ? " is-cheapest" : ""}${counted ? "" : " is-muted"}" data-tag="${state.channelMode === "all" ? "最低" : "计入"}" title="${counted ? "" : "当前渠道口径未计入这个价格"}">
+      <div class="receipt__head">${channelIcon(e.ch, "ch-icon")} ${CH_META[e.ch].short} ${confMark(e.p)}${counted ? "" : '<span class="ref-tag">参考</span>'}</div>
+      <div class="receipt__price"><b>${fmtCompact(e.p.amount, e.p.currency)}</b><span>${fmtCNY(e.cny, true)}</span></div>
+      <div class="receipt__meta"><span>${taxNote}${localEquiv}</span>${link}</div>
+    </div>`;
+  }
+
+  function renderRanking() {
+    const wrap = $("#ranking-list");
+    const rows = visibleRows();
+    const allRows = regionRows(state.plan);
+    if (!rows.length) {
+      wrap.innerHTML = `<div class="rank-row" style="cursor:default"><div></div><div class="rank-region"><div class="rank-region__name"><b>没有匹配的地区</b><small>换个关键词试试</small></div></div></div>`;
+      $("#ranking-foot").textContent = "没有匹配结果";
+      return;
+    }
+    const max = rows[rows.length - 1].cny;
+    const min = rows[0].cny;
+    const html = rows.map((row, i) => {
+      const p = row.best.p;
+      const c = CONF[p.confidence] || CONF.estimated;
+      const open = state.openRegion === row.region.code;
+      const save = max > 0 ? Math.max(0, (max - row.cny) / max * 100) : 0;
+      const saveText = i === 0 ? (state.channelMode === "all" ? "全场最低" : "渠道最低") : (save < 0.5 ? "接近最低" : `比最高省 ${save.toFixed(0)}%`);
+      const barW = max > 0 ? Math.max(6, (row.cny / max) * 100) : 0;
+      const barColor = row.best.ch === "official" ? "var(--teal)" : row.best.ch === "apple" ? "var(--ink)" : "var(--red)";
+      return `<article class="rank-row${i === 0 ? " is-first" : ""}${open ? " is-open" : ""}" data-region="${row.region.code}"
+        tabindex="0" role="button" aria-expanded="${open}"
+        style="--d:${Math.min(i * 26, 260)}ms;--bar:${barW}%;--bar-color:${barColor}">
+        <div class="rank-pos">
+          <span class="rank-num">${String(i + 1).padStart(2, "0")}</span>
+          <span class="rank-medal">${i < 3 ? "TOP" : "REGION"}</span>
+        </div>
+        <div class="rank-region">
+          <span class="flag-chip" style="--c1:${row.region.colors[0]};--c2:${row.region.colors[1]};--c3:${row.region.colors[2]}"><span>${row.region.code}</span></span>
+          <span class="rank-region__name"><b>${row.region.name}</b><small>${row.region.group} · VAT ${Math.round((row.region.vat || 0) * 100)}%</small></span>
+        </div>
+        <div class="channel-cell">
+          <span class="channel-badge" data-channel="${row.best.ch}">${channelIcon(row.best.ch, "ch-icon")}${CH_META[row.best.ch].short}</span>
+          <span class="conf conf--${c.cls}" title="${c.label}">${c.stamp}</span>
+          ${i === 0 ? `<span class="best-tag">${state.channelMode === "all" ? "全场最低" : "渠道最低"}</span>` : ""}
+        </div>
+        <div class="rank-local"><b>${fmtLocal(p.amount, p.currency)}</b><small>${p.currency} · 月付${row.best.taxApplied && (row.region.vat || 0) > 0 ? " · 含税估算" : ""}</small></div>
+        <div class="rank-cny"><b><sup>¥</sup>${Math.round(row.cny).toLocaleString("zh-CN")}</b><span class="rank-save">${saveText}</span></div>
+        <span class="rank-arrow">▾</span>
+        <div class="rank-detail">
+          <div class="receipt">${row.entries.map(e => receiptItem(row, e)).join("")}
+            <div class="receipt__note"><span>1 USD = ${fmtRate(fx.rates.CNY / fx.rates.USD)} CNY · ${fx.live ? "自动牌价" : "内置牌价"}</span><span>${state.channelMode === "all" ? "三渠道取最低" : `只看 ${CH_META[state.channelMode].label}`} · 含税估算：${state.taxOn ? "开" : "关"}</span></div>
+          </div>
+        </div>
+      </article>`;
+    }).join("");
+    wrap.innerHTML = html;
+    $("#ranking-foot").textContent = `共 ${rows.length} 个地区 · 价格快照 ${D.snapshotDate} · 口径：${modeLabel()} · 最低 ${fmtCNY(rows[0].cny)} · 点任意一行展开三渠道小票`;
+    $("#rank-updated").textContent = `价格 ${D.snapshotDate.slice(5)} · 牌价 ${fmtTime(fx.updated)}`;
+    const low = allRows[0].cny;
+    const high = allRows[allRows.length - 1].cny;
+    $("#hero-spread").textContent = fmtCNY(high - low);
+    $$(".rank-row[data-region]", wrap).forEach(el => {
+      const toggle = () => {
+        const code = el.dataset.region;
+        state.openRegion = state.openRegion === code ? null : code;
+        $$(".rank-row", wrap).forEach(r => {
+          const on = r.dataset.region === state.openRegion;
+          r.classList.toggle("is-open", on);
+          r.setAttribute("aria-expanded", String(on));
+        });
+      };
+      el.addEventListener("click", ev => {
+        if (ev.target.closest("a")) return;
+        toggle();
+      });
+      el.addEventListener("keydown", ev => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          toggle();
+        }
+      });
+    });
+  }
+
+  /* ---------------- render: FX ticker + panel ---------------- */
+  const TICKER_CURRENCIES = ["USD", "EUR", "GBP", "JPY", "HKD", "KRW", "INR", "SGD", "THB", "TRY", "BRL", "MXN", "ARS", "NGN", "EGP", "VND", "PHP", "CAD"];
+
+  function renderTicker() {
+    const items = TICKER_CURRENCIES.filter(c => fx.rates[c]).map(c => {
+      const cny = fx.rates.CNY / fx.rates[c];
+      let cls = "flat", arrow = "·", delta = "";
+      if (fx.prev && fx.prev[c]) {
+        const prev = fx.rates.CNY / fx.prev[c];
+        const d = (cny - prev) / prev * 100;
+        if (Math.abs(d) > 0.0001) {
+          cls = d > 0 ? "up" : "down";
+          arrow = d > 0 ? "▲" : "▼";
+          delta = Math.abs(d).toFixed(2) + "%";
+        }
+      }
+      return `<span class="ticker__item"><b>${c}/CNY</b> ${fmtRate(cny)} <span class="${cls}">${arrow}${delta}</span></span>`;
+    }).join("");
+    const track = $("#fx-ticker");
+    track.innerHTML = items;
+    $("#fx-status").textContent = `牌价 ${fx.live ? "自动" : "内置"} · ${fmtTime(fx.updated)}`;
+  }
+
+  function renderFxPanel() {
+    const wrap = $("#fx-grid");
+    const pairs = ["USD", "EUR", "GBP", "JPY", "HKD", "SGD"];
+    wrap.innerHTML = pairs.filter(c => fx.rates[c]).map(c => {
+      const cny = fx.rates.CNY / fx.rates[c];
+      let d = 0;
+      if (fx.prev && fx.prev[c]) {
+        const prev = fx.rates.CNY / fx.prev[c];
+        d = (cny - prev) / prev * 100;
+      }
+      const cls = d > 0.0001 ? "up" : d < -0.0001 ? "down" : "flat";
+      const arrow = d > 0.0001 ? "▲" : d < -0.0001 ? "▼" : "·";
+      return `<div class="fx-line"><span>1 ${c}</span><b>¥${fmtRate(cny)}</b><span class="fx-delta ${cls}">${arrow}${Math.abs(d).toFixed(2)}%</span></div>`;
+    }).join("");
+    $("#fx-updated").textContent = `${fx.live ? "源牌价" : "内置牌价"} ${fmtTime(fx.updated)} · 日更`;
+  }
+
+  /* ---------------- render: channel spread ---------------- */
+  function renderSpread() {
+    const sums = { official: [], apple: [], google: [] };
+    let officialWins = 0, appleWins = 0, googleWins = 0;
+    D.regions.forEach(region => {
+      const entries = CHANNELS.map(ch => channelPrice(state.plan, region, ch)).filter(Boolean);
+      entries.forEach(e => sums[e.ch].push(e.cny));
+      if (!entries.length) return;
+      entries.sort((a, b) => (a.cny - b.cny) || (CH_META[a.ch].pref - CH_META[b.ch].pref));
+      if (entries[0].ch === "official") officialWins++;
+      else if (entries[0].ch === "apple") appleWins++;
+      else googleWins++;
+    });
+    const avg = {};
+    CHANNELS.forEach(ch => {
+      avg[ch] = sums[ch].length ? sums[ch].reduce((a, b) => a + b, 0) / sums[ch].length : 0;
+    });
+    const max = Math.max(avg.official, avg.apple, avg.google, 1);
+    const rows = [
+      ["official", "官网", "var(--teal)"],
+      ["apple", "Apple", "var(--ink)"],
+      ["google", "Google", "var(--red)"]
+    ];
+    $("#spread-rows").innerHTML = rows.map(([ch, label, color]) => `
+      <div class="spread-row"><span>${label}</span>
+        <span class="spread-row__track"><i style="width:${Math.max(4, avg[ch] / max * 100)}%;background:${color}"></i></span>
+        <b>${fmtCNY(avg[ch])}</b>
+      </div>`).join("");
+    const diff = avg.official ? (avg.apple - avg.official) / avg.official * 100 : 0;
+    const diffText = Math.abs(diff) < 0.5 ? "几乎持平" : (diff > 0 ? `高 ${diff.toFixed(0)}%` : `低 ${Math.abs(diff).toFixed(0)}%`);
+    $("#spread-note").textContent = `全渠道口径 · 21 区均值 · Apple 比官网${diffText} · 官网最低 ${officialWins} 区 / Apple ${appleWins} 区 / Google 同档参考`;
+  }
+
+  function renderTakeaways() {
+    const rows = regionRows(state.plan);
+    if (!rows.length) return;
+    const wins = { official: 0, apple: 0, google: 0 };
+    rows.forEach(r => wins[r.best.ch]++);
+    const low = rows[0], high = rows[rows.length - 1];
+    const top3 = rows.slice(0, 3).map(r => r.region.name).join(" · ");
+    const saveHigh = high.cny > 0 ? Math.round((high.cny - low.cny) / high.cny * 100) : 0;
+    const storeWins = wins.apple + wins.google;
+    const secondTitle = state.channelMode === "all"
+      ? `${storeWins} 个地区由商店渠道拿下最低价`
+      : `当前只看：${modeLabel()}`;
+    const secondSub = state.channelMode === "all"
+      ? `官网 ${wins.official} 区 / Apple ${wins.apple} 区 / Google 同档`
+      : `${rows.length} 区均有报价 · 最低 ${fmtCNY(low.cny)} · 换口径会重排`;
+    $("#takeaway-list").innerHTML = `
+      <li><span class="tk-num">01</span><span class="tk-body"><b>低价前三：${top3}</b><small>最低 ${fmtCNY(low.cny)}，比最贵的 ${high.region.name} 省 ${saveHigh}%</small></span></li>
+      <li><span class="tk-num">02</span><span class="tk-body"><b>${secondTitle}</b><small>${secondSub}</small></span></li>
+      <li><span class="tk-num">03</span><span class="tk-body"><b>最贵座位：${high.region.name} ${fmtCNY(high.cny)}</b><small>${high.region.name} VAT ${Math.round((high.region.vat || 0) * 100)}% · ${CH_META[high.best.ch].label} 渠道</small></span></li>`;
+  }
+
+  /* ---------------- render: AI ladder ---------------- */
+  function variantOf(m) {
+    const v = m.name.replace(m.family, "").replace(/[()]/g, "").trim();
+    return v || "standard";
+  }
+
+  function renderLadder() {
+    const wrap = $("#ladder-list");
+    let models = D.ladder.models.slice();
+    if (state.ladderSort === "value") {
+      models = models.filter(m => m.cost > 0).sort((a, b) => (b.score / b.cost) - (a.score / a.cost));
+    } else if (state.ladderSort === "speed") {
+      models = models.filter(m => m.latency != null).sort((a, b) => a.latency - b.latency);
+    } else {
+      models = models.sort((a, b) => b.score - a.score);
+    }
+    const maxScore = Math.max(...D.ladder.models.map(m => m.score), 1);
+    const maxValue = Math.max(...D.ladder.models.map(m => m.cost > 0 ? m.score / m.cost : 0), 1);
+    const minLat = Math.min(...D.ladder.models.map(m => m.latency != null ? m.latency : Infinity));
+    const shown = models.slice(0, 9);
+    wrap.innerHTML = shown.map((m, i) => {
+      let value, unit, width;
+      if (state.ladderSort === "value") {
+        value = (m.score / m.cost).toFixed(1);
+        unit = "分/$";
+        width = Math.min(100, (m.score / m.cost) / maxValue * 100);
+      } else if (state.ladderSort === "speed") {
+        value = m.latency.toFixed(0);
+        unit = "首字 s";
+        width = Math.min(100, minLat / m.latency * 100);
+      } else {
+        value = m.score.toFixed(0);
+        unit = "INDEX";
+        width = m.score / maxScore * 100;
+      }
+      return `<div class="ladder-row" title="${m.name} · ${m.creator}">
+        <span class="ladder-row__rank">${i + 1}</span>
+        <span class="ladder-row__model"><b>${m.family}</b><small>${m.creator} · ${variantOf(m)}</small></span>
+        <span class="ladder-row__score">${value}<small>${unit}</small></span>
+        <span class="ladder-row__bar"><i style="--w:${Math.max(4, width)}%"></i></span>
+      </div>`;
+    }).join("");
+  }
+
+  function setLadderStatus(mode, text) {
+    const el = $("#ladder-status");
+    el.textContent = text || (mode === "live" ? "LIVE" : "今日快照");
+    const pulse = $("#ladder-pulse");
+    pulse.classList.toggle("pulse--amber", mode !== "live");
+    $("#ladder-updated").textContent = mode === "live"
+      ? `同步于 ${fmtTime(new Date())}`
+      : `今日快照 ${D.ladder.snapshot}`;
+  }
+
+  function parseArenaHtml(html) {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const out = [];
+    $$("tr", doc).forEach(tr => {
+      const tds = $$("td", tr);
+      if (tds.length < 7) return;
+      const name = (tds[0].textContent || "").trim();
+      const creator = (tds[2].querySelector("img") || {}).alt || (tds[2].textContent || "").trim();
+      const nums = tds.slice(3, 7).map(td => parseFloat((td.textContent || "").replace(/[$,]/g, "")));
+      if (!name || !isFinite(nums[0]) || !isFinite(nums[1])) return;
+      out.push({
+        name, creator,
+        context: (tds[1].textContent || "").trim(),
+        intelligence: nums[0], cost: nums[1], time: nums[2], latency: nums[3]
+      });
+    });
+    if (out.length < 8) throw new Error("parse failed");
+    const seen = new Set();
+    const dedup = [];
+    out.sort((a, b) => b.intelligence - a.intelligence).forEach(m => {
+      const family = m.name.replace(/\s*\(.*\)$/, "").trim();
+      if (!family || seen.has(family.toLowerCase())) return;
+      seen.add(family.toLowerCase());
+      dedup.push({
+        rank: dedup.length + 1, name: m.name, family, creator: m.creator,
+        score: m.intelligence, cost: m.cost, time: m.time, latency: m.latency, context: m.context
+      });
+    });
+    return dedup.slice(0, 14);
+  }
+
+  async function syncLadder(manual) {
+    if (window.__ladderBusy) return;
+    window.__ladderBusy = true;
+    if (manual) setLadderStatus("sync", "同步中");
+    const target = "https://artificialanalysis.ai/leaderboards/models";
+    const proxies = [
+      "https://api.allorigins.win/raw?url=" + encodeURIComponent(target),
+      "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(target),
+      "https://corsproxy.io/?url=" + encodeURIComponent(target)
+    ];
+    for (const url of proxies) {
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 12000);
+        const res = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
+        clearTimeout(timer);
+        if (!res.ok) continue;
+        const html = await res.text();
+        if (!/Intelligence Index/i.test(html)) continue;
+        const models = parseArenaHtml(html);
+        if (!models.length) continue;
+        D.ladder.models = models;
+        D.ladder.snapshot = new Date().toISOString().slice(0, 10);
+        renderLadder();
+        setLadderStatus("live", "LIVE");
+        window.__ladderBusy = false;
+        return;
+      } catch (err) {
+        /* try next proxy */
+      }
+    }
+    window.__ladderBusy = false;
+    setLadderStatus("snapshot", "今日快照");
+  }
+
+  /* ---------------- render: sources ---------------- */
+  function renderSources() {
+    $("#sources").innerHTML = D.sources.map((s, i) =>
+      `<div class="source-item"><span class="source-num">[${i + 1}]</span><span><a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a><small>${s.note}</small></span></div>`
+    ).join("");
+  }
+
+  function renderAll() {
+    renderTabs();
+    renderSummary();
+    renderRanking();
+    renderTicker();
+    renderFxPanel();
+    renderSpread();
+    renderTakeaways();
+    renderLadder();
+    renderHero();
+  }
+
+  /* ---------------- FX refresh ---------------- */
+  function setFxStatus() {
+    fakeStatus();
+  }
+  function fakeStatus() {
+    const live = fx.live;
+    $("#fx-status").textContent = `牌价 ${live ? "自动" : "内置"} · ${fmtTime(fx.updated)}`;
+  }
+
+  async function fetchFx(manual) {
+    if (fx.loading) return;
+    fx.loading = true;
+    if (manual) $("#fx-refresh").textContent = "拉取中…";
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 12000);
+      const res = await fetch("https://open.er-api.com/v6/latest/USD", { cache: "no-store", signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error("http " + res.status);
+      const json = await res.json();
+      if (json.result !== "success" || !json.rates || !json.rates.CNY) throw new Error("bad payload");
+      fx.prev = Object.assign({}, fx.rates);
+      fx.rates = json.rates;
+      const previousUpdated = fx.updated.getTime();
+      const nextUpdated = json.time_last_update_utc ? new Date(json.time_last_update_utc).getTime() : Date.now();
+      const rateChanged = nextUpdated !== previousUpdated;
+      fx.updated = new Date(nextUpdated);
+      fx.live = true;
+      if (rateChanged) renderAll();
+      else {
+        const status = document.querySelector("#fx-status");
+        if (status) status.textContent = `牌价 自动 · ${fmtTime(fx.updated)}`;
+        renderFxPanel();
+      }
+      setLadderStatus($("#ladder-status").textContent === "LIVE" ? "live" : "snapshot");
+    } catch (err) {
+      fx.live = false;
+      renderTicker();
+      renderFxPanel();
+      renderHero();
+      $("#fx-status").textContent = "内置牌价";
+      $("#fx-updated").textContent = `内置牌价 ${fmtTime(fx.updated)} · 日更`;
+    } finally {
+      fx.loading = false;
+      fx.nextAt = Date.now() + 60000;
+      if (manual) $("#fx-refresh").textContent = "重拉";
+    }
+  }
+
+  function tickFx() {
+    const left = Math.max(0, Math.ceil((fx.nextAt - Date.now()) / 1000));
+    if (!fx.loading) {
+      const status = fx.live ? "自动" : "内置";
+      $("#fx-updated").textContent = `牌价 ${fmtTime(fx.updated)} · ${status} · ${left}s 后检查`;
+    }
+    if (left <= 0) fetchFx(false);
+  }
+
+  /* ---------------- events ---------------- */
+  function bind() {
+    $("#tax-toggle").addEventListener("change", e => {
+      state.taxOn = e.target.checked;
+      renderAll();
+    });
+    $("#region-search").addEventListener("input", e => {
+      state.query = e.target.value;
+      renderSummary();
+      renderRanking();
+    });
+    $("#print-btn").addEventListener("click", () => window.print());
+    $("#fx-refresh").addEventListener("click", () => fetchFx(true));
+    $("#ladder-sync").addEventListener("click", () => syncLadder(true));
+    $("#ladder-tabs").addEventListener("click", e => {
+      const btn = e.target.closest(".ladder__tab");
+      if (!btn) return;
+      state.ladderSort = btn.dataset.sort;
+      $$(".ladder__tab").forEach(b => b.classList.toggle("is-active", b === btn));
+      renderLadder();
+    });
+    $$(".channel-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const mode = btn.dataset.mode;
+        if (!mode || mode === state.channelMode) return;
+        state.channelMode = mode;
+        $$(".channel-chip").forEach(b => {
+          const on = b.dataset.mode === mode;
+          b.classList.toggle("is-on", on);
+          b.setAttribute("aria-pressed", String(on));
+        });
+        renderAll();
+      });
+    });
+  }
+
+  /* ---------------- init ---------------- */
+  bind();
+  renderSources();
+  renderAll();
+  setLadderStatus("snapshot", "今日快照");
+  tickFx();
+  setInterval(tickFx, 5000);
+  fetchFx(false);
+})();
+
+
+
+
+
+
+
+
+</script>
+<script>
+if ('serviceWorker' in navigator && (
+  location.protocol === 'https:' ||
+  location.hostname === 'localhost' ||
+  location.hostname === '127.0.0.1'
+)) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
+
+
