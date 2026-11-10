@@ -2,6 +2,8 @@
 
 这是给 GitHub Pages 的部署目录，根目录的 `index.html` 就是完整网页。
 
+**当前已发布：** https://beenotfound.github.io/ai-price-gazette/
+
 ## 最快上线（网页上传）
 
 1. 在 GitHub 新建一个 **Public** 仓库，例如 `ai-price-gazette`
@@ -24,6 +26,14 @@ powershell -ExecutionPolicy Bypass -File .\publish-ipad.ps1 -RepoUrl https://git
 ```
 
 脚本会初始化 `ipad-site` 的本地 git、提交、设置 remote 并 push。第一次 push 会弹 GitHub 登录。
+
+如果 `github.com` 的 HTTPS 推送超时（国内常见），可以在工作区根目录改用 GitHub API 上传：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\publish-ipad-api.ps1
+```
+
+它会让 Git Credential Manager 读取已登录的 GitHub 凭据，然后逐个文件更新到仓库，不依赖 `github.com:443` 的 git 连接。
 
 ## iPad 上当作 App
 
