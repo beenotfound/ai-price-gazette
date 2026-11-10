@@ -1,0 +1,39 @@
+{
+  "id": "./",
+  "name": "AI 会员全球比价日报",
+  "short_name": "AI 比价",
+  "description": "ChatGPT、Claude、Grok 会员在全球 21 个地区的官网 / Apple / Google Play 价格排行，附 AI 天梯。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#f4ecdc",
+  "theme_color": "#f4ecdc",
+  "categories": [
+    "finance",
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "./icons/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
